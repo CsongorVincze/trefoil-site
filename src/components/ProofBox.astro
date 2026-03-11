@@ -1,0 +1,189 @@
+---
+interface Props {
+  title?: string;
+  lang?: 'hu' | 'en';
+}
+
+const { lang = 'hu' } = Astro.props;
+const defaultTitle = lang === 'en' ? 'Proof' : 'Levezetés';
+const hideLabel = lang === 'en' ? 'Hide ▲' : 'Elrejtés ▲';
+const { title = defaultTitle } = Astro.props;
+---
+
+<div class="proof-box closed">
+  <button class="proof-header" aria-expanded="false">
+    <span class="toggle-icon">▼</span>
+    <span class="proof-title">{title}</span>
+  </button>
+  <div class="proof-content">
+    <slot />
+    <button class="proof-footer-close">
+        {hideLabel}
+    </button>
+  </div>
+</div>
+
+<style>
+  .proof-box {
+    border: 2px solid var(--frosted-blue, #a8dadc);
+    border-radius: 12px;
+    background-color: #ffffff;
+    overflow: hidden;
+    margin: 2rem 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .proof-header {
+    width: 100%;
+    background-color: var(--frosted-blue, #a8dadc);
+    padding: 1rem 1.5rem;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--oxford-navy, #1d3557);
+    text-align: left;
+    transition: background-color 0.2s ease;
+  }
+
+  .proof-header:hover {
+    background-color: var(--cerulean, #457b9d);
+    color: white;
+  }
+
+  .proof-header:hover .toggle-icon {
+      color: white;
+  }
+
+  .toggle-icon {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+    color: var(--oxford-navy, #1d3557);
+  }
+
+  .proof-box.closed .toggle-icon {
+    transform: rotate(-90deg);
+  }
+
+  .proof-content {
+    padding: 1.5rem;
+    border-top: 1px solid var(--frosted-blue, #a8dadc);
+    background-color: #fafafa; /* slightly off-white inner bg */
+    /* max-height removed to allow full expansion */
+    overflow-y: visible;
+    overflow-x: auto;
+  }
+  
+  .proof-box.closed .proof-content {
+    display: none;
+  }
+
+  .proof-footer-close {
+      display: block;
+      margin: 1rem auto 0 auto;
+      background: none;
+      border: 1px solid var(--frosted-blue);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      color: var(--cerulean);
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+  }
+
+  .proof-footer-close:hover {
+      background: var(--cerulean);
+      color: white;
+  }
+
+    /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .proof-box {
+        border-color: var(--cerulean);
+        background-color: var(--oxford-navy);
+    }
+    .proof-header {
+        background-color: var(--oxford-navy);
+        color: var(--frosted-blue);
+        border-bottom: 1px solid var(--cerulean);
+    }
+    .proof-header:hover {
+        background-color: var(--cerulean);
+        color: white;
+    }
+    .proof-content {
+        background-color: rgba(29, 53, 87, 0.5); /* darker inner */
+        border-top-color: var(--cerulean);
+        color: #e0e0e0;
+    }
+    .toggle-icon {
+        color: var(--frosted-blue);
+    }
+  }
+
+  /* Custom Scrollbar */
+  .proof-content::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .proof-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .proof-content::-webkit-scrollbar-thumb {
+    background-color: var(--frosted-blue, #a8dadc);
+    border-radius: 4px;
+  }
+  .proof-content::-webkit-scrollbar-thumb:hover {
+    background-color: var(--cerulean, #457b9d);
+  }
+
+  /* Dark mode scrollbar */
+  @media (prefers-color-scheme: dark) {
+      .proof-content::-webkit-scrollbar-thumb {
+          background-color: var(--cerulean);
+      }
+      .proof-content::-webkit-scrollbar-thumb:hover {
+          background-color: var(--frosted-blue);
+      }
+  }
+</style>
+
+<script>
+  class ProofBox {
+      container: HTMLElement;
+      header: HTMLElement;
+      footerClose: HTMLElement;
+
+      constructor(el: HTMLElement) {
+          this.container = el;
+          this.header = el.querySelector('.proof-header') as HTMLElement;
+          this.footerClose = el.querySelector('.proof-footer-close') as HTMLElement;
+          
+          this.header.addEventListener('click', () => this.toggle());
+          this.footerClose?.addEventListener('click', () => this.close());
+      }
+
+      toggle() {
+          this.container.classList.toggle('closed');
+          const isClosed = this.container.classList.contains('closed');
+          this.header.setAttribute('aria-expanded', (!isClosed).toString());
+      }
+
+      close() {
+          this.container.classList.add('closed');
+          this.header.setAttribute('aria-expanded', 'false');
+          // Optional: scroll back to header if needed, but keeping it simple
+          this.header.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+  }
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.proof-box').forEach(el => {
+      new ProofBox(el as HTMLElement);
+    });
+  });
+</script>

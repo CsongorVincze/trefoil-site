@@ -1,0 +1,176 @@
+<div id="boid-canvas-container">
+  <canvas id="boid-canvas"></canvas>
+</div>
+
+<style>
+  #boid-canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: auto;
+  }
+  #boid-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  // ── Main thread: zero boid work here ──
+  // All physics + rendering lives in /boid-worker.js via OffscreenCanvas.
+
+  const canvas = document.getElementById('boid-canvas') as HTMLCanvasElement;
+
+  // OffscreenCanvas is supported in all modern browsers
+  if ('OffscreenCanvas' in window && typeof (canvas as any).transferControlToOffscreen === 'function') {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const W   = window.innerWidth;
+    const H   = window.innerHeight;
+
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+
+    const offscreen = (canvas as any).transferControlToOffscreen();
+    const worker    = new Worker('/boid-worker.js');
+
+    // Hand the canvas to the worker — after this the main thread can't touch it
+    worker.postMessage({ type: 'init', canvas: offscreen, width: W, height: H, dpr }, [offscreen]);
+
+    // Forward mouse position (cheap — just two numbers)
+    window.addEventListener('mousemove', (e) => {
+      worker.postMessage({ type: 'mousemove', x: e.clientX, y: e.clientY });
+    });
+
+    // Forward resize
+    window.addEventListener('resize', () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const W   = window.innerWidth;
+      const H   = window.innerHeight;
+      worker.postMessage({ type: 'resize', width: W, height: H, dpr });
+    });
+
+  } else {
+    // Fallback: inline canvas (same code but on main thread, for old browsers)
+    const ctx = canvas.getContext('2d')!;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let W = window.innerWidth, H = window.innerHeight;
+    canvas.width  = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const PERCEPTION = 50, PERCEPTION_SQ = 2500;
+    const MOUSE_RADIUS_SQ = 10000, MAX_FORCE = 0.2, MAX_SPEED = 3;
+    const CELL_SIZE = 50, FRAME_MS = 1000 / 30;
+    let mouseX = -9999, mouseY = -9999;
+
+    let count = Math.max(30, Math.min(150, Math.floor((W * H) / 8000)));
+    const px = new Float32Array(count), py = new Float32Array(count);
+    const vx = new Float32Array(count), vy = new Float32Array(count);
+    const ax = new Float32Array(count), ay = new Float32Array(count);
+    let gridCols = Math.ceil(W/CELL_SIZE)+1, gridRows = Math.ceil(H/CELL_SIZE)+1;
+    let grid = new Int32Array(gridCols*gridRows);
+    let gridCount = new Int32Array(gridCols*gridRows);
+    let gridBoids = new Int32Array(count);
+
+    for (let i = 0; i < count; i++) {
+      px[i] = Math.random()*W; py[i] = Math.random()*H;
+      const a = Math.random()*Math.PI*2, s = 2+Math.random()*2;
+      vx[i] = Math.cos(a)*s; vy[i] = Math.sin(a)*s;
+    }
+
+    function buildGrid() {
+      const total = gridCols*gridRows;
+      for (let c=0;c<total;c++) gridCount[c]=0;
+      for (let i=0;i<count;i++) {
+        const col=Math.min(Math.max((px[i]/CELL_SIZE)|0,0),gridCols-1);
+        const row=Math.min(Math.max((py[i]/CELL_SIZE)|0,0),gridRows-1);
+        gridCount[row*gridCols+col]++;
+      }
+      let sum=0;
+      for (let c=0;c<total;c++){grid[c]=sum;sum+=gridCount[c];gridCount[c]=0;}
+      for (let i=0;i<count;i++){
+        const col=Math.min(Math.max((px[i]/CELL_SIZE)|0,0),gridCols-1);
+        const row=Math.min(Math.max((py[i]/CELL_SIZE)|0,0),gridRows-1);
+        const ci=row*gridCols+col;
+        gridBoids[grid[ci]+gridCount[ci]]=i;gridCount[ci]++;
+      }
+    }
+
+    let lastTime = 0;
+    function loop(t: number) {
+      requestAnimationFrame(loop);
+      if (t - lastTime < FRAME_MS) return;
+      lastTime = t;
+      buildGrid();
+      for (let i=0;i<count;i++){
+        const posX=px[i],posY=py[i],velX=vx[i],velY=vy[i];
+        let aX=0,cX=0,sX=0,aY=0,cY=0,sY=0,tot=0;
+        const mc=Math.min(Math.max((posX/CELL_SIZE)|0,0),gridCols-1);
+        const mr=Math.min(Math.max((posY/CELL_SIZE)|0,0),gridRows-1);
+        for(let r=Math.max(0,mr-1);r<=Math.min(gridRows-1,mr+1);r++){
+          for(let c=Math.max(0,mc-1);c<=Math.min(gridCols-1,mc+1);c++){
+            const ci=r*gridCols+c,st=grid[ci],en=st+gridCount[ci];
+            for(let k=st;k<en;k++){
+              const j=gridBoids[k];if(j===i)continue;
+              const dx=px[j]-posX,dy=py[j]-posY,dSq=dx*dx+dy*dy;
+              if(dSq<PERCEPTION_SQ&&dSq>0){
+                aX+=vx[j];aY+=vy[j];cX+=px[j];cY+=py[j];
+                const inv=1/dSq;sX-=dx*inv;sY-=dy*inv;tot++;
+              }
+            }
+          }
+        }
+        let accX=0,accY=0;
+        if(tot>0){
+          const inv=1/tot;
+          const steer=(fx:number,fy:number)=>{
+            let m=Math.sqrt(fx*fx+fy*fy);
+            if(m>0){fx=fx/m*MAX_SPEED;fy=fy/m*MAX_SPEED;}
+            fx-=velX;fy-=velY;
+            m=Math.sqrt(fx*fx+fy*fy);
+            if(m>MAX_FORCE){fx=fx/m*MAX_FORCE;fy=fy/m*MAX_FORCE;}
+            return [fx,fy];
+          };
+          let [alx,aly]=steer(aX*inv,aY*inv);
+          let [cox,coy]=steer(cX*inv-posX,cY*inv-posY);
+          let [sex,sey]=steer(sX*inv,sY*inv);
+          accX=alx+cox+sex*1.2;accY=aly+coy+sey*1.2;
+        }
+        const mdx=posX-mouseX,mdy=posY-mouseY,mSq=mdx*mdx+mdy*mdy;
+        if(mSq<MOUSE_RADIUS_SQ&&mSq>0){
+          const md=Math.sqrt(mSq);
+          let msx=mdx/md*MAX_SPEED-velX,msy=mdy/md*MAX_SPEED-velY;
+          const mm=Math.sqrt(msx*msx+msy*msy);
+          if(mm>MAX_FORCE){msx=msx/mm*MAX_FORCE;msy=msy/mm*MAX_FORCE;}
+          accX+=msx*3;accY+=msy*3;
+        }
+        ax[i]=accX;ay[i]=accY;
+      }
+      for(let i=0;i<count;i++){
+        vx[i]+=ax[i];vy[i]+=ay[i];
+        const sp=vx[i]*vx[i]+vy[i]*vy[i];
+        if(sp>MAX_SPEED*MAX_SPEED){const inv=MAX_SPEED/Math.sqrt(sp);vx[i]*=inv;vy[i]*=inv;}
+        px[i]+=vx[i];py[i]+=vy[i];
+        if(px[i]>W)px[i]-=W;else if(px[i]<0)px[i]+=W;
+        if(py[i]>H)py[i]-=H;else if(py[i]<0)py[i]+=H;
+      }
+      ctx.clearRect(0,0,W,H);
+      ctx.strokeStyle='rgba(168,218,220,0.39)';ctx.fillStyle='rgba(241,250,238,0.59)';ctx.lineWidth=1;
+      for(let i=0;i<count;i++){
+        const theta=Math.atan2(vy[i],vx[i])+Math.PI*.5;
+        const cosT=Math.cos(theta),sinT=Math.sin(theta),x=px[i],y=py[i];
+        ctx.beginPath();
+        ctx.moveTo(x+4*sinT,y-4*cosT);
+        ctx.lineTo(x-2*cosT-4*sinT,y-2*sinT+4*cosT);
+        ctx.lineTo(x+2*cosT-4*sinT,y+2*sinT+4*cosT);
+        ctx.closePath();ctx.fill();ctx.stroke();
+      }
+    }
+    window.addEventListener('mousemove',(e)=>{mouseX=e.clientX;mouseY=e.clientY;});
+    requestAnimationFrame(loop);
+  }
+</script>

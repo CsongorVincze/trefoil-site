@@ -1,0 +1,167 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Node {
+  id: string;
+  name: string;
+  val: number;
+  type: 'post' | 'tag';
+  slug?: string;
+  x?: number;
+  y?: number;
+  __bckgDimensions?: number[];
+}
+
+interface Link {
+  source: string;
+  target: string;
+}
+
+const posts = await getCollection('blog');
+
+const nodes: Node[] = [];
+const links: Link[] = [];
+const tagsSet = new Set<string>();
+
+posts.forEach((post) => {
+  // Add post node
+  nodes.push({
+    id: post.id,
+    name: post.data.title,
+    val: 20, // larger size for posts
+    type: 'post',
+    slug: post.id
+  });
+
+  if (post.data.tags) {
+    post.data.tags.forEach(tag => {
+      tagsSet.add(tag);
+      links.push({
+        source: post.id,
+        target: tag
+      });
+    });
+  }
+});
+
+// Add tag nodes
+tagsSet.forEach(tag => {
+  nodes.push({
+    id: tag,
+    name: "#" + tag,
+    val: 10, // smaller size for tags
+    type: 'tag'
+  });
+});
+
+const graphData = { nodes, links };
+---
+
+<div id="graph-container"></div>
+
+<script is:inline src="//unpkg.com/force-graph"></script>
+<script define:vars={{ graphData }}>
+  const elem = document.getElementById('graph-container');
+
+  const Graph = ForceGraph()(elem)
+    .graphData(graphData)
+    .nodeLabel('name')
+    .nodeColor(node => node.type === 'post' ? '#a78bfa' : '#4ade80') // Purple for posts, Green for tags
+    .nodeVal('val')
+    .linkColor(() => '#ffffff50') // Semi-transparent white links
+    .backgroundColor('#00000000') // Transparent background
+    .onNodeClick(node => {
+      if (node.type === 'post') {
+        window.location.href = `/blog/${node.slug}`;
+      } else {
+        // Optional: Filter by tag or zoom in?
+        // For now, just focus or highlight?
+        Graph.centerAt(node.x, node.y, 1000);
+        Graph.zoom(8, 2000);
+      }
+    })
+    .nodeCanvasObject((node, ctx, globalScale) => {
+      const label = node.name;
+      const fontSize = 12/globalScale;
+      ctx.font = `${fontSize}px "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
+      const textWidth = ctx.measureText(label).width;
+      const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.5); 
+
+      const r = Math.sqrt(node.val) * 2;
+      const textYOffset = r + fontSize; 
+      const textY = node.y + textYOffset;
+
+      // Draw background
+      const w = bckgDimensions[0];
+      const h = bckgDimensions[1];
+      ctx.fillStyle = 'rgba(10, 10, 15, 0.8)';
+      
+      const rx = node.x - w / 2;
+      const ry = textY - h / 2;
+
+      ctx.beginPath();
+      if (ctx.roundRect) {
+         ctx.roundRect(rx, ry, w, h, 4/globalScale);
+      } else {
+         ctx.rect(rx, ry, w, h);
+      }
+      ctx.fill();
+
+      // Draw Node
+      ctx.beginPath();
+      // Keep original rendering logic
+      if(node.type === 'post') {
+            ctx.fillStyle = '#646cff';
+            ctx.arc(node.x, node.y, r, 0, 2 * Math.PI, false);
+            ctx.fill();
+      } else {
+            ctx.fillStyle = '#888888';
+            ctx.arc(node.x, node.y, r/1.5, 0, 2 * Math.PI, false);
+            ctx.fill();
+      }
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = node.type === 'post' ? '#fff' : '#ddd';
+      
+      ctx.fillText(label, node.x, textY);
+
+      node.__bckgDimensions = bckgDimensions; 
+      node.__textYOffset = textYOffset;
+    })
+    .nodePointerAreaPaint((node, color, ctx) => {
+        const r = Math.sqrt(node.val) * 2;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, r, 0, 2 * Math.PI, false);
+        ctx.fill();
+        
+        if (node.__bckgDimensions && node.__textYOffset) {
+             const w = node.__bckgDimensions[0];
+             const h = node.__bckgDimensions[1];
+             const textY = node.y + node.__textYOffset;
+             ctx.beginPath();
+             ctx.rect(node.x - w / 2, textY - h / 2, w, h);
+             ctx.fill(); 
+        }
+    });
+
+    // Fit to canvas
+    Graph.d3Force('charge').strength(-100);
+</script>
+
+<style>
+  #graph-container {
+    width: 100%;
+    height: 60vh; /* Takes up 60% of viewport height */
+    position: relative;
+    z-index: 10;
+    cursor: grab;
+    backdrop-filter: blur(2px);
+    border-radius: 1rem;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(20, 20, 30, 0.4);
+  }
+</style>

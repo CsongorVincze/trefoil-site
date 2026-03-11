@@ -1,0 +1,147 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import BoidBackground from '../components/BoidBackground.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="hu">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<BoidBackground />
+		<Header />
+		<main>
+			<p class="eyebrow">Welcome to</p>
+			<h1 class="hero-title">
+				<span class="char" style="--i:0">T</span>
+				<span class="char" style="--i:1">r</span>
+				<span class="char" style="--i:2">e</span>
+				<span class="char" style="--i:3">f</span>
+				<span class="char" style="--i:4">o</span>
+				<span class="char" style="--i:5">i</span>
+				<span class="char" style="--i:6">l</span>
+			</h1>
+			<p class="lead">
+				Whether you're here to finally "click" with a difficult concept or to dive deep into math/physics topic, we've got you covered. We bridge the gap between intuition and rigorous theory across a variety of STEM topics. Check out our <a href="/blog">blog</a> to see how we apply these ideas to real-world projects.
+			</p>
+			<p class="notice">
+				<strong>Pardon our dust:</strong> Trefoil is a work in progress. We are actively writing, editing, and polishing our materials. Thank you for growing with us — stay tuned for frequent updates!
+			</p>
+		</main>
+		{/* Footer removed */}
+		<style>
+			/* ── Entrance keyframes ── */
+			@keyframes fadeSlideUp {
+				from {
+					opacity: 0;
+					transform: translateY(24px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+			@keyframes charIn {
+				from {
+					opacity: 0;
+					transform: translateY(32px) rotate(8deg);
+					filter: blur(4px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0) rotate(0deg);
+					filter: blur(0);
+				}
+			}
+
+			main {
+				padding-top: 6em;
+			}
+
+			/* Staggered cascade entrance for sections */
+			.eyebrow,
+			.lead,
+			.notice {
+				animation: fadeSlideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+			}
+			.eyebrow { animation-delay: 0.1s; }
+			.lead    { animation-delay: 0.7s; }
+			.notice  { animation-delay: 0.9s; }
+
+			.eyebrow {
+				font-size: 0.85em;
+				letter-spacing: 0.18em;
+				text-transform: uppercase;
+				color: var(--frosted-blue);
+				margin-bottom: 0.25em;
+				opacity: 0.8;
+			}
+
+			/* ── Per-character h1 ── */
+			.hero-title {
+				font-size: 4em;
+				color: var(--honeydew);
+				margin-bottom: 0.5em;
+				line-height: 1.1;
+				cursor: default;
+				display: inline-block;
+			}
+
+			.char {
+				display: inline-block;
+				animation: charIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+				animation-delay: calc(0.25s + var(--i) * 0.07s);
+				color: var(--honeydew);
+				transition: color 0.3s ease;
+				cursor: default;
+			}
+
+			/* Coolors-style bounce on hover */
+			@keyframes charBounce {
+				0%   { transform: translateY(0);     color: var(--honeydew); }
+				20%  { transform: translateY(-18px);  color: var(--frosted-blue); }
+				40%  { transform: translateY(-22px);  color: var(--oxford-navy); }
+				55%  { transform: translateY(4px);    color: var(--oxford-navy); }
+				70%  { transform: translateY(-6px);   color: var(--oxford-navy); }
+				85%  { transform: translateY(2px);    color: var(--oxford-navy); }
+				100% { transform: translateY(0);      color: var(--oxford-navy); }
+			}
+
+			.char:hover {
+				animation: charBounce 0.7s cubic-bezier(0.28, 0.84, 0.42, 1) forwards;
+				text-shadow:
+					0 0 18px rgba(168, 218, 220, 0.5),
+					0 0 36px rgba(69, 123, 157, 0.3);
+			}
+
+			.lead {
+				font-size: 1.15em;
+				line-height: 1.8;
+				color: var(--honeydew);
+				max-width: 60ch;
+				margin-bottom: 2em;
+			}
+			.lead a {
+				color: var(--frosted-blue);
+				text-decoration: underline;
+				text-underline-offset: 3px;
+			}
+			.lead a:hover {
+				color: var(--punch-red);
+			}
+			.notice {
+				font-size: 0.9em;
+				color: var(--frosted-blue);
+				opacity: 0.75;
+				border-left: 3px solid var(--cerulean);
+				padding-left: 1em;
+				max-width: 55ch;
+				line-height: 1.7;
+			}
+		</style>
+	</body>
+</html>

@@ -1,0 +1,412 @@
+---
+interface Props {
+  problem: string;
+  solution: number[][];
+  lang?: 'hu' | 'en';
+}
+
+const { problem, solution, lang = 'hu' } = Astro.props;
+const rows = solution.length;
+const cols = solution[0]?.length || 0;
+
+const i18n = {
+  hu: {
+    checkBtn: 'Ellenőrzés',
+    resetBtn: 'Újra',
+    correctBtn: 'Helyes!',
+    fillAll: 'Kérlek töltsd ki az összes mezőt!',
+    correct: 'Helyes válasz! Szép munka.',
+    wrong: 'Nem egészen. Próbáld újra a piros mezőket!',
+  },
+  en: {
+    checkBtn: 'Check',
+    resetBtn: 'Reset',
+    correctBtn: 'Correct!',
+    fillAll: 'Please fill in all fields!',
+    correct: 'Correct! Well done.',
+    wrong: 'Not quite. Try the red fields again!',
+  },
+}[lang];
+---
+
+<div class="exercise-container" data-solution={JSON.stringify(solution)}>
+  <div class="exercise-header">
+    <span class="icon">✎</span>
+    <h3 class="exercise-text">{problem}</h3>
+  </div>
+
+  <div class="matrix-wrapper">
+    <div class="matrix-bracket left"></div>
+    <div class="input-grid" style={`--cols: ${cols}`}>
+      {solution.flatMap((row, rowIndex) =>
+        row.map((_, colIndex) => (
+          <input
+            type="number"
+            class="matrix-input"
+            data-row={rowIndex}
+            data-col={colIndex}
+          />
+        ))
+      )}
+    </div>
+    <div class="matrix-bracket right"></div>
+  </div>
+
+  <div class="button-group">
+    <button class="check-btn"
+      data-label-check={i18n.checkBtn}
+      data-label-correct-btn={i18n.correctBtn}
+      data-label-fill-all={i18n.fillAll}
+      data-label-correct={i18n.correct}
+      data-label-wrong={i18n.wrong}
+    >{i18n.checkBtn}</button>
+    <button class="reset-btn" data-label-reset={i18n.resetBtn}>{i18n.resetBtn}</button>
+  </div>
+
+  <div class="feedback-message hidden"></div>
+</div>
+
+<style>
+  .exercise-container {
+    background: #f0fdf4;
+    border: 1px solid #4ade80;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 600px;
+    margin: 2rem auto;
+    box-shadow: 
+      0 4px 6px -1px rgba(74, 222, 128, 0.05),
+      0 10px 15px -3px rgba(74, 222, 128, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .exercise-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 10px 20px -5px rgba(74, 222, 128, 0.1),
+      0 20px 25px -5px rgba(74, 222, 128, 0.05);
+  }
+
+  .exercise-header {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 2rem;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .exercise-text {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #14532d;
+  }
+
+  .matrix-wrapper {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding: 0 10px;
+  }
+
+  .matrix-bracket {
+    width: 10px;
+    border: 2px solid #15803d;
+    position: absolute;
+    top: -5px;
+    bottom: -5px;
+  }
+
+  .matrix-bracket.left {
+    left: 0;
+    border-right: none;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+
+  .matrix-bracket.right {
+    right: 0;
+    border-left: none;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+
+  .input-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    gap: 0.75rem;
+  }
+
+  .matrix-input {
+    width: 60px;
+    height: 60px;
+    border: 2px solid #bbf7d0;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #15803d;
+    outline: none;
+    background: white;
+    transition: all 0.2s;
+    appearance: textfield; /* Removes spinner in some browsers */
+  }
+
+  .matrix-input::-webkit-outer-spin-button,
+  .matrix-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .matrix-input:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+  }
+
+  .matrix-input.correct {
+    background-color: #dcfce7;
+    border-color: #22c55e;
+  }
+
+  .matrix-input.wrong {
+    background-color: #fef2f2;
+    border-color: #ef4444;
+    animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .check-btn {
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(34, 197, 94, 0.2);
+  }
+
+  .check-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 8px -1px rgba(34, 197, 94, 0.3);
+  }
+
+  .check-btn:active {
+    transform: translateY(0);
+  }
+  
+  .check-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .reset-btn {
+    background: white;
+    color: #15803d;
+    border: 2px solid #bbf7d0;
+    padding: 0.75rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .reset-btn:hover {
+    border-color: #22c55e;
+    background: #f0fdf4;
+    transform: translateY(-1px);
+  }
+
+  .reset-btn:active {
+    transform: translateY(0);
+  }
+
+  .feedback-message {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+  }
+  
+  .feedback-message.hidden {
+    opacity: 0;
+    transform: translateY(-10px);
+    display: none;
+  }
+
+  .feedback-message.success {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #22c55e;
+  }
+
+  .feedback-message.error {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #ef4444;
+  }
+
+  @keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+  }
+
+   /* Dark mode */
+  @media (prefers-color-scheme: dark) {
+     .exercise-container {
+        background: #052e16;
+        border-color: #22c55e;
+     }
+     .exercise-text {
+        color: #dcfce7;
+     }
+     .matrix-input {
+        background: #14532d;
+        border-color: #22c55e;
+        color: #f0fdf4;
+     }
+     .matrix-input:focus {
+        border-color: #86efac;
+     }
+     .matrix-bracket {
+        border-color: #4ade80;
+     }
+  }
+</style>
+
+<script>
+  class MatrixExercise {
+    container: HTMLElement;
+    inputs: NodeListOf<HTMLInputElement>;
+    checkBtn: HTMLButtonElement;
+    resetBtn: HTMLButtonElement;
+    feedback: HTMLElement;
+    solution: number[][];
+
+    constructor(el: HTMLElement) {
+      this.container = el;
+      this.inputs = el.querySelectorAll('.matrix-input');
+      this.checkBtn = el.querySelector('.check-btn') as HTMLButtonElement;
+      this.resetBtn = el.querySelector('.reset-btn') as HTMLButtonElement;
+      this.feedback = el.querySelector('.feedback-message') as HTMLElement;
+      this.solution = JSON.parse(el.dataset.solution || '[]');
+
+      this.checkBtn.addEventListener('click', () => this.checkAnswer());
+      this.resetBtn.addEventListener('click', () => this.reset());
+      
+      // Allow enter key to submit
+      this.container.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') this.checkAnswer();
+      });
+    }
+
+    reset() {
+      this.inputs.forEach(input => {
+        input.value = '';
+        input.classList.remove('correct', 'wrong');
+      });
+      this.feedback.classList.add('hidden');
+      this.checkBtn.disabled = false;
+      this.checkBtn.textContent = this.checkBtn.dataset.labelCheck || 'Ellenőrzés';
+    }
+
+    checkAnswer() {
+      let allCorrect = true;
+      let allFilled = true;
+
+      this.inputs.forEach(input => {
+        const row = parseInt(input.dataset.row || '0');
+        const col = parseInt(input.dataset.col || '0');
+        const userValue = parseFloat(input.value);
+        const correctValue = this.solution[row][col];
+
+        if (input.value === '') {
+            allFilled = false;
+        }
+
+        // Reset state
+        input.classList.remove('correct', 'wrong');
+
+        if (!isNaN(userValue) && Math.abs(userValue - correctValue) < 0.0001) {
+          input.classList.add('correct');
+        } else {
+          allCorrect = false;
+          // Only mark wrong if user attempted it
+          if (input.value !== '') {
+             input.classList.add('wrong');
+          }
+        }
+      });
+
+      if (!allFilled) {
+        this.showFeedback(this.checkBtn.dataset.labelFillAll || 'Kérlek töltsd ki az összes mezőt!', 'error');
+        return;
+      }
+
+      if (allCorrect) {
+        this.showFeedback(this.checkBtn.dataset.labelCorrect || 'Helyes válasz! Szép munka.', 'success');
+        this.checkBtn.textContent = this.checkBtn.dataset.labelCorrectBtn || 'Helyes!';
+        this.checkBtn.disabled = true;
+         // Trigger confetti or something fun here if desired
+      } else {
+        this.showFeedback(this.checkBtn.dataset.labelWrong || 'Nem egészen. Próbáld újra a piros mezőket!', 'error');
+      }
+    }
+
+    showFeedback(msg: string, type: 'success' | 'error') {
+      this.feedback.textContent = msg;
+      this.feedback.className = `feedback-message ${type}`;
+      this.feedback.classList.remove('hidden');
+    }
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('.exercise-container').forEach(el => {
+      new MatrixExercise(el as HTMLElement);
+    });
+  });
+
+  // Fallback for non-view-transitions setups
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.exercise-container').forEach(el => {
+      new MatrixExercise(el as HTMLElement);
+    });
+  });
+</script>

@@ -1,0 +1,351 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+
+interface Node {
+    id: string;
+    name: string;
+    val: number;
+    type: 'main' | 'branch';
+    x?: number;
+    y?: number;
+    __bckgDimensions?: number[];
+}
+
+interface Link {
+    source: string;
+    target: string;
+}
+
+// Filter for H2 and H3
+const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+
+const processedNodes: Node[] = [];
+// Map clean names to slugs for resolving references
+const nameToSlug = new Map<string, string>();
+const links: Link[] = [];
+
+// Helper to clean title and extract metadata
+const parseHeading = (text: string) => {
+    let cleanText = text;
+    let from: string[] = [];
+    let to: string[] = [];
+
+    // Regex for (from: ...; to: ...) logic
+    // We look for content inside parentheses at the end of the string
+    const match = text.match(/\s*\((.*?)\)$/);
+    if (match) {
+        const metadata = match[1];
+        cleanText = text.replace(match[0], '').trim();
+
+        // Parse parts separated by semicolons
+        const parts = metadata.split(';');
+        parts.forEach(part => {
+            const [key, val] = part.split(':').map(s => s.trim().toLowerCase());
+            if ((key === 'from' || key === 'to') && val) {
+                // Split multiple values by comma
+                const targets = val.split(',').map(s => s.trim());
+                if (key === 'from') from.push(...targets);
+                if (key === 'to') to.push(...targets);
+            }
+        });
+    }
+
+    return { cleanText, from, to };
+};
+
+// First pass: Create nodes and build lookup map
+filteredHeadings.forEach(h => {
+    const { cleanText } = parseHeading(h.text);
+    const isH2 = h.depth === 2;
+    
+    // Store mapping for "exact clean text" -> "actual slug"
+    // We store lowercased key for case-insensitive matching
+    nameToSlug.set(cleanText.toLowerCase(), h.slug);
+
+    processedNodes.push({
+        id: h.slug,
+        name: cleanText,
+        val: isH2 ? 5 : 2,
+        type: isH2 ? 'main' : 'branch'
+    });
+});
+
+// Second pass: Build links
+let lastNode: Node | null = null;
+let lastH2: Node | null = null;
+
+filteredHeadings.forEach((h, index) => {
+    const { cleanText, from, to } = parseHeading(h.text);
+    const currentNode = processedNodes[index];
+    const isH2 = h.depth === 2;
+
+    let hasExplicitConnection = false;
+
+    // Handle 'from' relations
+    from.forEach(sourceName => {
+        const sourceSlug = nameToSlug.get(sourceName.toLowerCase());
+        if (sourceSlug) {
+            links.push({ source: sourceSlug, target: h.slug });
+            hasExplicitConnection = true;
+        }
+    });
+
+    // Handle 'to' relations
+    to.forEach(targetName => {
+        const targetSlug = nameToSlug.get(targetName.toLowerCase());
+        if (targetSlug) {
+            links.push({ source: h.slug, target: targetSlug });
+            hasExplicitConnection = true;
+        }
+    });
+
+    // Fallback to auto-linking ONLY if no explicit 'from' is defined
+    // AND it's not the very first node
+    if (!hasExplicitConnection && from.length === 0) {
+         if (isH2) {
+            if (lastH2) {
+                links.push({ source: lastH2.id, target: currentNode.id });
+            }
+         } else {
+             // H3
+             if (lastH2) {
+                 links.push({ source: lastH2.id, target: currentNode.id });
+             } else if (lastNode) {
+                  // Fallback connection
+                 links.push({ source: lastNode.id, target: currentNode.id });
+             }
+         }
+    }
+
+    if (isH2) lastH2 = currentNode;
+    lastNode = currentNode;
+});
+
+const graphData = { nodes: processedNodes, links };
+---
+
+<div id="graph-wrapper">
+  <div id="post-graph-container"></div>
+  <button id="fullscreen-btn" title="Toggle Fullscreen">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+  </button>
+</div>
+
+<!-- Cleanup script to hide metadata from the actual page headings -->
+<script define:vars={{ headings: filteredHeadings }}>
+    // We run this to strip the metadata from the visible DOM elements
+    window.addEventListener('load', () => {
+        headings.forEach(h => {
+            const el = document.getElementById(h.slug);
+            if (el) {
+                // Determine the clean text again or just replace regex
+                // Matching the same regex as the server-side
+                el.innerText = el.innerText.replace(/\s*\((from|to):.*?\)$/i, '');
+            }
+        });
+    });
+</script>
+
+<script is:inline src="//unpkg.com/force-graph"></script>
+<script define:vars={{ graphData }}>
+  const elem = document.getElementById('post-graph-container');
+  const wrapper = document.getElementById('graph-wrapper');
+  const btn = document.getElementById('fullscreen-btn');
+  let isFullscreen = false;
+  let Graph = null;
+
+  if (graphData.nodes.length > 0) {
+      Graph = ForceGraph()(elem)
+        .graphData(graphData)
+        .nodeLabel('name')
+        .nodeColor(node => node.type === 'main' ? '#a78bfa' : '#c084fc')
+        .nodeVal(node => node.type === 'main' ? 5 : 2) // Original values
+        .nodeRelSize(6) // Slightly larger relative size for hit detection but visually smaller
+        .linkColor(() => '#ffffff50')
+        .linkDirectionalArrowLength(3.5)
+        .linkDirectionalArrowRelPos(1)
+        .backgroundColor('#00000000')
+        .width(elem.offsetWidth)
+        .height(elem.offsetHeight)
+        .enableNodeDrag(true)
+        .onNodeHover(node => {
+          if (node) {
+            elem.style.cursor = 'pointer';
+          } else {
+            elem.style.cursor = 'grab';
+          }
+        })
+        .onNodeClick(node => {
+          if (isFullscreen) {
+             toggleFullscreen();
+          }
+          const element = document.getElementById(node.id);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        })
+        .nodeCanvasObjectMode(() => 'after')
+        .nodeCanvasObject((node, ctx, globalScale) => {
+          const label = node.name;
+          const scaleMultiplier = isFullscreen ? 1.5 : 1.0; 
+          const fontSize = 14 * scaleMultiplier; 
+          
+          ctx.font = `600 ${fontSize}px "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
+          const textWidth = ctx.measureText(label).width;
+          const padding = fontSize * 0.5;
+          
+          // Visual radius purely for text positioning
+          // The actual node circle is drawn by the library now
+          const baseRadius = node.type === 'main' ? 5 : 3; // Reverted visual sizes
+          const r = Math.sqrt(node.val) * 2 * scaleMultiplier; // Approximate visual match
+          const textY = node.y + r + fontSize * 0.7;
+
+          // Draw background for text
+          const w = textWidth + padding * 2;
+          const h = fontSize + padding;
+          
+          ctx.fillStyle = 'rgba(15, 15, 25, 0.85)';
+          ctx.beginPath();
+          const rx = node.x - w / 2;
+          const ry = textY - h / 2;
+          if (ctx.roundRect) {
+            ctx.roundRect(rx, ry, w, h, 4);
+          } else {
+            ctx.rect(rx, ry, w, h);
+          }
+          ctx.fill();
+          
+          ctx.strokeStyle = 'rgba(167, 139, 250, 0.3)';
+          ctx.lineWidth = 1; 
+          ctx.stroke();
+
+          // Draw Text
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          
+          if (globalScale > 0.6) {
+             ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+             ctx.lineWidth = 2.5;
+             ctx.strokeText(label, node.x, textY);
+          }
+          
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(label, node.x, textY);
+        });
+        
+      Graph.d3Force('charge').strength(-300);
+      Graph.d3Force('link').distance(70);
+
+      // Handle Resize
+      window.addEventListener('resize', () => {
+          if(!isFullscreen) {
+            Graph.width(elem.offsetWidth);
+            Graph.height(elem.offsetHeight);
+          } else {
+            Graph.width(window.innerWidth);
+            Graph.height(window.innerHeight);
+          }
+      });
+      
+  } else {
+      wrapper.style.display = 'none';
+  }
+
+  function toggleFullscreen() {
+      isFullscreen = !isFullscreen;
+      if (isFullscreen) {
+          wrapper.classList.add('fullscreen');
+          // Wait a tick for CSS transition/layout
+          setTimeout(() => {
+              Graph.width(window.innerWidth);
+              Graph.height(window.innerHeight);
+              Graph.zoomToFit(400); 
+          }, 50);
+      } else {
+          wrapper.classList.remove('fullscreen');
+          setTimeout(() => {
+              Graph.width(elem.offsetWidth);
+              Graph.height(elem.offsetHeight);
+              Graph.zoomToFit(400);
+          }, 50);
+      }
+  }
+
+  btn.addEventListener('click', toggleFullscreen);
+</script>
+
+
+<style>
+  #graph-wrapper {
+    position: relative;
+    width: 100%;
+    margin: 0 auto 2rem auto;
+    border-radius: 12px;
+    z-index: 10;
+  }
+
+  /* Fullscreen override */
+  #graph-wrapper.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    z-index: 9999;
+    background: rgba(10, 10, 15, 0.95); /* darker background for focus */
+    backdrop-filter: blur(10px);
+  }
+  
+  #graph-wrapper.fullscreen #post-graph-container {
+      height: 100vh;
+      border-radius: 0;
+      border: none;
+  }
+
+  #post-graph-container {
+    width: 100%; /* Match prose width */
+    height: 300px;
+    background: rgba(20, 20, 30, 0.4);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(2px);
+    overflow: hidden;
+    transition: height 0.3s ease;
+  }
+
+  #fullscreen-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 8px;
+      padding: 6px;
+      cursor: pointer;
+      z-index: 20;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+  }
+
+  #fullscreen-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+  }
+</style>

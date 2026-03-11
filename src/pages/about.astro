@@ -1,0 +1,261 @@
+---
+import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
+import Layout from '../layouts/BlogPost.astro';
+---
+
+<Layout
+	title="About us"
+	description="The people behind Trefoil — building a bridge between intuition and rigorous STEM education."
+	pubDate={new Date('February 26 2026')}
+	heroImage={AboutHeroImage}
+>
+
+	<div class="about-wrapper">
+
+		<p class="about-intro">
+			Hey there! 👋 We're <strong>Attila</strong> and <strong>Csongor Vincze</strong> — two brothers who got passionate about teching cool things.
+		</p>
+
+		<section class="about-section">
+			<div class="section-label">How it started</div>
+			<p>
+				It all began with a high-school workshop. We wanted to show younger students that STEM isn't just dry theory — it's full of beautiful patterns, surprising connections, and genuinely fun problems. We started by teaching middle-schoolers 3D design, basic programming, and a touch of electronics. (By the way that workshop is still active today.)
+			</p>
+		</section>
+
+		<section class="about-section">
+			<div class="section-label">What Trefoil is</div>
+			<p>
+				Trefoil is our attempt to scale that workshop to the internet. We write study materials that bridge the gap between raw intuition and rigorous theory — the kind of explanations we wished we had when we were learning. Expect interactive simulations, worked examples, and the occasional detour into why something actually works, not just how.
+			</p>
+			<p>
+				We cover topics across <strong>mathematics</strong>, <strong>physics</strong>, and <strong>engineering</strong>. And we believe deeply that the best way to understand something is to play with it — so you'll find a lot of simulations and hands-on exercises alongside the theory.
+			</p>
+		</section>
+
+		<section class="about-section">
+			<div class="section-label">Get in touch</div>
+			<div class="contact-cards">
+				<a class="contact-card" href="mailto:vinczefarkascsongor@gmail.com">
+					<span class="contact-icon">✉️</span>
+					<div>
+						<div class="contact-name">Csongor Vincze</div>
+						<div class="contact-detail">vinczefarkascsongor@gmail.com</div>
+					</div>
+				</a>
+				<a class="contact-card" href="mailto:attila.marton.vincze@gmail.com">
+					<span class="contact-icon">✉️</span>
+					<div>
+						<div class="contact-name">Attila Vincze</div>
+						<div class="contact-detail">attila.marton.vincze@gmail.com</div>
+					</div>
+				</a>
+				<a class="contact-card" href="https://www.linkedin.com/in/csongor-vincze-445748285/" target="_blank" rel="noopener noreferrer">
+					<span class="contact-icon">🔗</span>
+					<div>
+						<div class="contact-name">LinkedIn — Csongor</div>
+						<div class="contact-detail">csongor-vincze-445748285</div>
+					</div>
+				</a>
+			</div>
+		</section>
+
+		<section class="about-section">
+			<div class="section-label">Previous projects</div>
+			<p>
+				Want to see what else we've been up to outside of Trefoil? Take a look at our CanSat project — a miniaturized satellite the size of a soda can, built and launched as part of a high school competition, with other amazing teammates.
+			</p>
+			<a class="project-card" href="https://sites.google.com/view/tfs-cansat/szponzorok?authuser=0" target="_blank" rel="noopener noreferrer">
+				<div class="project-card-left">
+					<span class="project-icon">🛰️</span>
+				</div>
+				<div class="project-card-right">
+					<div class="project-title">TFS CanSat</div>
+					<div class="project-desc">A soda-can-sized satellite with custom sensors, data logging, and a parachute recovery system. Built from scratch for competition.</div>
+					<div class="project-link-hint">Visit project site ↗</div>
+				</div>
+			</a>
+		</section>
+
+	</div>
+
+</Layout>
+
+<style>
+	.about-wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+	}
+
+	/* ── Intro paragraph ── */
+	.about-intro {
+		font-size: 1.2em;
+		line-height: 1.85;
+		color: var(--honeydew);
+		border-left: 4px solid var(--frosted-blue);
+		padding-left: 1.25rem;
+		margin: 0;
+		animation: fadeSlideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+		animation-delay: 0.1s;
+	}
+
+	.about-intro strong {
+		color: var(--frosted-blue);
+	}
+
+	/* ── Sections ── */
+	.about-section {
+		display: flex;
+		flex-direction: column;
+		gap: 0.9rem;
+		animation: fadeSlideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+	}
+
+	.about-section:nth-child(2) { animation-delay: 0.2s; }
+	.about-section:nth-child(3) { animation-delay: 0.35s; }
+	.about-section:nth-child(4) { animation-delay: 0.5s; }
+
+	.about-section p {
+		margin: 0;
+		color: var(--honeydew);
+		line-height: 1.85;
+		opacity: 0.92;
+	}
+
+	.about-section strong {
+		color: var(--frosted-blue);
+	}
+
+	/* ── Section label (eyebrow style) ── */
+	.section-label {
+		font-size: 0.75em;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: var(--frosted-blue);
+		opacity: 0.75;
+		margin-bottom: 0.1rem;
+	}
+
+	/* ── Contact cards ── */
+	.contact-cards {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.contact-card {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem 1.25rem;
+		border: 1px solid rgba(168, 218, 220, 0.2);
+		border-radius: 10px;
+		background: rgba(168, 218, 220, 0.04);
+		text-decoration: none;
+		transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+	}
+
+	.contact-card:hover {
+		border-color: var(--frosted-blue);
+		background: rgba(168, 218, 220, 0.1);
+		transform: translateX(4px);
+		color: inherit;
+	}
+
+	.contact-icon {
+		font-size: 1.4rem;
+		flex-shrink: 0;
+	}
+
+	.contact-name {
+		font-weight: 700;
+		font-size: 0.95em;
+		color: var(--honeydew);
+		margin-bottom: 0.15rem;
+	}
+
+	.contact-detail {
+		font-size: 0.82em;
+		color: var(--frosted-blue);
+		opacity: 0.8;
+		word-break: break-all;
+	}
+
+	/* ── Entrance animation ── */
+	@keyframes fadeSlideUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* ── Project card ── */
+	.project-card {
+		display: flex;
+		gap: 1.25rem;
+		padding: 1.25rem 1.5rem;
+		border: 1px solid rgba(168, 218, 220, 0.2);
+		border-radius: 12px;
+		background: rgba(168, 218, 220, 0.04);
+		text-decoration: none;
+		transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+		align-items: flex-start;
+	}
+
+	.project-card:hover {
+		border-color: var(--frosted-blue);
+		background: rgba(168, 218, 220, 0.09);
+		transform: translateY(-3px);
+		box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+		color: inherit;
+	}
+
+	.project-card-left {
+		font-size: 2.2rem;
+		line-height: 1;
+		flex-shrink: 0;
+		padding-top: 0.1rem;
+	}
+
+	.project-card-right {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+
+	.project-title {
+		font-weight: 700;
+		font-size: 1.05em;
+		color: var(--honeydew);
+	}
+
+	.project-desc {
+		font-size: 0.87em;
+		color: var(--honeydew);
+		opacity: 0.78;
+		line-height: 1.65;
+	}
+
+	.project-link-hint {
+		font-size: 0.78em;
+		color: var(--frosted-blue);
+		letter-spacing: 0.04em;
+		margin-top: 0.25rem;
+	}
+
+	/* ── Responsive ── */
+	@media (min-width: 540px) {
+		.contact-cards {
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+		.contact-card {
+			flex: 1 1 220px;
+		}
+	}
+</style>

@@ -1,0 +1,79 @@
+---
+interface Props {
+  title?: string;
+  lang?: 'hu' | 'en';
+}
+
+const { lang = 'hu' } = Astro.props;
+const defaultTitle = lang === 'en' ? 'Axiom' : 'Axióma';
+const { title = defaultTitle } = Astro.props;
+---
+
+<div class="axiom-box">
+  <div class="axiom-header">
+    <span class="axiom-title">{title}</span>
+  </div>
+  <div class="axiom-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .axiom-box {
+    border: 2px solid #9d4edd;
+    border-radius: 12px;
+    background-color: #ffffff;
+    overflow: hidden;
+    margin: 2rem 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .axiom-header {
+    width: 100%;
+    background-color: #9d4edd;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #ffffff;
+    text-align: left;
+  }
+
+  .axiom-content {
+    padding: 1.5rem;
+    border-top: 1px solid #9d4edd;
+    background-color: #fbf5ff; /* Very light purple bg */
+    color: var(--oxford-navy);
+    overflow-x: auto;
+  }
+
+  /* Use specific styles for lists inside to make them look nice */
+  .axiom-content :global(ol) {
+      margin-left: 1rem;
+      padding-left: 1rem;
+  }
+  
+  .axiom-content :global(p) {
+      margin-bottom: 0.5rem;
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .axiom-box {
+        border-color: #9d4edd;
+        background-color: var(--oxford-navy);
+    }
+    .axiom-header {
+        background-color: #7b2cbf;
+        color: #ffffff;
+        border-bottom: 1px solid #5a189a;
+    }
+    .axiom-content {
+        background-color: rgba(157, 78, 221, 0.1); /* Slight purple tint */
+        border-top-color: #9d4edd;
+        color: var(--honeydew);
+    }
+  }
+</style>

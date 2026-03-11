@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+import logoImage from '../assets/logo.png';
+import { SITE_TITLE } from '../consts';
+import HeaderLink from './HeaderLink.astro';
+---
+
+<header>
+	<nav>
+		<h2><a href="/"><Image src={logoImage} alt={SITE_TITLE} width={128} height={128} style="width: 64px; height: 64px;" /></a></h2>
+		<div class="internal-links">
+			<HeaderLink href="/">Home</HeaderLink>
+			<HeaderLink href="/learn">Learn</HeaderLink>
+			<HeaderLink href="/blog">Blog</HeaderLink>
+			<HeaderLink href="/about">About</HeaderLink>
+		</div>
+{/* Social links removed */}
+	</nav>
+</header>
+<style>
+	header {
+		margin: 0;
+		padding: 0 1em;
+		background: #ffffff;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 5%);
+	}
+	h2 {
+		margin: 0;
+		font-size: 1em;
+	}
+
+	h2 a,
+	h2 a.active {
+		text-decoration: none;
+		color: var(--oxford-navy);
+	}
+	nav {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	nav a {
+		padding: 1em 0.5em;
+		color: var(--oxford-navy);
+		border-bottom: 4px solid transparent;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	nav a.active {
+		text-decoration: none;
+		border-bottom-color: var(--punch-red);
+		color: var(--punch-red);
+	}
+	@media (max-width: 720px) {
+		.social-links {
+			display: none;
+		}
+	}
+</style>

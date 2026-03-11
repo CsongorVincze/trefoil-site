@@ -1,0 +1,399 @@
+---
+import katex from 'katex';
+
+interface Props {
+  question: string;
+  options: string[];
+  correctAnswerIndex: number;
+  lang?: 'hu' | 'en';
+}
+
+const { question, options, correctAnswerIndex, lang = 'hu' } = Astro.props;
+
+const i18n = {
+  hu: {
+    retryBtn: 'Próbáld újra',
+    correct: 'Helyes válasz! Szép munka.',
+    wrong: 'Nem egészen. Próbáld újra!',
+  },
+  en: {
+    retryBtn: 'Try again',
+    correct: 'Correct! Well done.',
+    wrong: 'Not quite. Try again!',
+  },
+}[lang];
+
+// Render LaTeX delimiters ($...$  and $$...$$) to HTML using KaTeX
+function renderLatex(text: string): string {
+  // Display math first ($$...$$)
+  let result = text.replace(/\$\$([\s\S]*?)\$\$/g, (_, math) => {
+    try {
+      return katex.renderToString(math.trim(), { displayMode: true, throwOnError: false });
+    } catch { return _; }
+  });
+  // Inline math ($...$)
+  result = result.replace(/\$(.*?)\$/g, (_, math) => {
+    try {
+      return katex.renderToString(math.trim(), { displayMode: false, throwOnError: false });
+    } catch { return _; }
+  });
+  return result;
+}
+
+const renderedQuestion = renderLatex(question);
+const renderedOptions = options.map(opt => renderLatex(opt));
+---
+
+<div class="quiz-container" data-correct-index={correctAnswerIndex} data-label-correct={i18n.correct} data-label-wrong={i18n.wrong}>
+  <div class="question-header">
+    <span class="icon">?</span>
+    <h3 class="question-text" set:html={renderedQuestion}></h3>
+  </div>
+  
+  <div class="options-grid">
+    {renderedOptions.map((option, index) => (
+      <button class="option-btn" data-index={index}>
+        <span class="option-letter">{String.fromCharCode(65 + index)}</span>
+        <span class="option-content" set:html={option}></span>
+        <span class="result-icon"></span>
+      </button>
+    ))}
+  </div>
+  
+  <div class="feedback-message hidden"></div>
+  <button class="retry-btn hidden" data-retry-label={i18n.retryBtn}>{i18n.retryBtn}</button>
+</div>
+
+<style>
+  .quiz-container {
+    background: #ffffff;
+    border: 1px solid var(--frosted-blue);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 600px;
+    margin: 2rem auto;
+    box-shadow: 
+      0 4px 6px -1px rgba(29, 53, 87, 0.05),
+      0 10px 15px -3px rgba(29, 53, 87, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .quiz-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 10px 20px -5px rgba(29, 53, 87, 0.1),
+      0 20px 25px -5px rgba(29, 53, 87, 0.05);
+  }
+
+  .question-header {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--punch-red), var(--cerulean));
+    color: var(--honeydew);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .question-text {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--oxford-navy);
+  }
+
+  .options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .option-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--frosted-blue);
+    background: white;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: left;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--cerulean);
+    background: var(--honeydew);
+  }
+
+  .option-btn:disabled {
+    cursor: default;
+    opacity: 0.8;
+  }
+
+  .option-letter {
+    background: var(--frosted-blue);
+    color: var(--oxford-navy);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    margin-right: 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
+
+  .option-btn:hover:not(:disabled) .option-letter {
+    background: var(--cerulean);
+    color: white;
+  }
+
+  .option-content {
+    flex-grow: 1;
+    font-weight: 500;
+    color: #1d3557; /* var(--oxford-navy) fallback */
+    font-size: 1.05rem;
+  }
+
+  .result-icon {
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Success State */
+  .option-btn.correct {
+    border-color: var(--cerulean);
+    background: #ecfdf5;
+  }
+
+  .option-btn.correct .option-letter {
+    background: var(--cerulean);
+    color: white;
+  }
+
+  .option-btn.correct .result-icon {
+    opacity: 1;
+    transform: scale(1);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23457b9d' stroke-width='3'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M5 13l4 4L19 7' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  /* Error State */
+  .option-btn.wrong {
+    border-color: var(--punch-red);
+    background: #fef2f2;
+    animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+
+  .option-btn.wrong .option-letter {
+    background: var(--punch-red);
+    color: white;
+  }
+
+  .option-btn.wrong .result-icon {
+    opacity: 1;
+    transform: scale(1);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23e63946' stroke-width='3'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .feedback-message {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: center;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+  }
+  
+  .feedback-message.hidden {
+    opacity: 0;
+    transform: translateY(-10px);
+    display: none;
+  }
+
+  .feedback-message.success {
+    background: #ecfdf5;
+    color: var(--cerulean);
+    border: 1px solid var(--frosted-blue);
+  }
+
+  .feedback-message.error {
+    background: #fef2f2;
+    color: var(--punch-red);
+    border: 1px solid var(--punch-red);
+  }
+
+  .retry-btn {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--punch-red);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    align-self: center;
+    transition: opacity 0.3s, transform 0.2s;
+  }
+
+  .retry-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .retry-btn.hidden {
+    display: none;
+  }
+
+  @keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+  }
+  
+  /* Dark mode - using uniform palette logic */
+  @media (prefers-color-scheme: dark) {
+    .quiz-container {
+      background: var(--oxford-navy);
+      border-color: var(--cerulean);
+    }
+    .question-text {
+      color: var(--honeydew);
+    }
+    .option-btn {
+      background: var(--cerulean);
+      border-color: var(--frosted-blue);
+    }
+    .option-content {
+      color: white;
+    }
+    .option-letter {
+      background: var(--oxford-navy);
+      color: var(--frosted-blue);
+    }
+    .option-btn:hover:not(:disabled) {
+      background: var(--oxford-navy);
+      border-color: var(--honeydew);
+    }
+  }
+</style>
+
+<script>
+  // Use a class to handle logic for multiple instances
+  class QuizComponent {
+    container: HTMLElement;
+    buttons: NodeListOf<HTMLButtonElement>;
+    feedback: HTMLElement;
+    retryBtn: HTMLButtonElement;
+    correctIndex: number;
+    answered: boolean = false;
+    labels: { correct: string; wrong: string; retryBtn: string };
+
+    constructor(el: HTMLElement) {
+      this.container = el;
+      this.buttons = el.querySelectorAll('.option-btn');
+      this.feedback = el.querySelector('.feedback-message') as HTMLElement;
+      this.retryBtn = el.querySelector('.retry-btn') as HTMLButtonElement;
+      this.correctIndex = parseInt(el.dataset.correctIndex || '0');
+      // Read i18n labels from data attributes set at build time
+      this.labels = {
+        correct: el.dataset.labelCorrect || 'Helyes válasz! Szép munka.',
+        wrong: el.dataset.labelWrong || 'Nem egészen. Próbáld újra!',
+        retryBtn: this.retryBtn?.dataset.retryLabel || 'Próbáld újra',
+      };
+      
+      this.buttons.forEach(btn => {
+        btn.addEventListener('click', () => this.handleGuess(btn));
+      });
+
+      if (this.retryBtn) {
+        this.retryBtn.addEventListener('click', () => this.reset());
+      }
+    }
+
+    handleGuess(btn: HTMLButtonElement) {
+      if (this.answered) return;
+      this.answered = true;
+
+      const selectedIndex = parseInt(btn.dataset.index || '0');
+      const isCorrect = selectedIndex === this.correctIndex;
+
+      // Disable all buttons
+      this.buttons.forEach(b => {
+        b.disabled = true;
+      });
+
+      if (isCorrect) {
+        btn.classList.add('correct');
+        this.showFeedback(this.labels.correct, 'success');
+        this.triggerConfetti(btn);
+      } else {
+        btn.classList.add('wrong');
+        this.showFeedback(this.labels.wrong, 'error');
+        // Show retry button
+        if (this.retryBtn) {
+          this.retryBtn.classList.remove('hidden');
+        }
+      }
+    }
+
+    reset() {
+      this.answered = false;
+      this.buttons.forEach(b => {
+        b.disabled = false;
+        b.classList.remove('correct', 'wrong');
+      });
+      this.feedback.classList.add('hidden');
+      if (this.retryBtn) {
+        this.retryBtn.classList.add('hidden');
+      }
+    }
+
+    showFeedback(msg: string, type: 'success' | 'error') {
+      this.feedback.textContent = msg;
+      this.feedback.className = `feedback-message ${type}`;
+    }
+    
+    triggerConfetti(element: HTMLElement) {
+      // Simple burst effect could go here, or just stick to CSS animations
+      // For now, the CSS success state is the main visual feedback
+    }
+  }
+
+  // Initialize all instances
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.quiz-container').forEach(el => {
+      new QuizComponent(el as HTMLElement);
+    });
+  });
+</script>
