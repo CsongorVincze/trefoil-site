@@ -153,9 +153,9 @@ $$
     "it's uniteless, it is just the number of field lines passing trough the surface",
     "it's uniteless, cause scalar product can not work with units",
     "$Nm/C$",
-    "$N/C"
+    "$N/C$"
   ]}
-  correctAnswerIndex={1}
+  correctAnswerIndex={2}
 />
 
 Sofar We built up our intuition on flux and saw how to formalize it to mathematically to be able to use it in more complex situation sas well. I want to pinpoint something before we go further. The intuitive image is useful but it has some flaws.
@@ -163,4 +163,14 @@ Sofar We built up our intuition on flux and saw how to formalize it to mathemati
 1. As we know dot products can give us negative values as well. Flux can be negative. While counting fieldlines is always a non negative number.
 2. Flux isn't uniteless.
 3. Filed lines aren't an actual thing. We just use them because they are making the things more visualizable. (We discussed this arelier.)
+
+🙋‍♂️: What if we want to integrate over a closed surface?
+
+👨‍🏫: This is actually a really important next step! It's useful to agree on that the surface normal at each point is pointing outside our closed surface. Then we just do what we have done eralier. the only notational difference is that we put a little circle to the integral to indicate that we are working with a closed surface.:
+
+$$
+\Phi_A = \oint_A \mathbf{E} \mathbf{dA}
+$$
+
+👨‍🏫: As a homework you can think about what this cyclic integral means intuitively!
 
