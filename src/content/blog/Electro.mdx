@@ -72,6 +72,95 @@ $$
 F = \frac{1}{4 \pi \epsilon_0} \frac{Q_1 Q_2}{r^2}
 $$
 
-OK 
+OK We're gonna skip a lot here xd. I'll write it later.
 
+## The second law of electrostatics
+
+### Electrostatic flux
+
+👨‍🏫: Let's talk about electric flux! If you remember we discussed electric field lines. In summary; If we place a little test charge into the electric field. Then we ask the question.: In which direction would the test charge begin to move? then the tangent of the field lines (at the position we're interested in) would show us that specific direction. This is the first property of the field lines. The second is that the density of the field lines show us the strength of the electric field. So, putted in simple terms. where the lines are crowded we sense a strong electic field, where they are spares the field is weaker there. So, they are relly useful indicators. However its worth mentioning that electric field lines are just a handy tool for visualization, the elecric field not only exists on the lines.
+
+First if you want the intuitive picture about flux it is something that kind of measures the number of electric field lines passing trough a surface.
+
+🙋‍♂️: But didn't you said earlier that we would have to draw infinite number of filed lines, because the field is present (in many situations) everywhere?
+
+👨‍🏫: Yes you're completly right! We'll formalize this concept in a moment. Just hold the intuitive picture in the back of you mind, it will come handy!
+So, let's say that we have a homogeneous electric field that is passing trough a surface $A$. First let's observe what happens when the field is perpendicular to the surface, and this surface happens to be square. the electric flux here is just the product of the strength of the electric field and the area or the surface. So, intuitively if you thing about the strength of the electric field as a made up density; Fieldlines/area and this area is small then the flux is just the number of fieldlines passing trough our square. Of course our intuitive picture is not precise mathematically but it helps us understand the concept of flux.
+OOOk. Based on our intuitive image what would you say, what is the electric flux when the surface is paralell to the electric field?
+
+🙋‍♂️: I assume that there are no field lines that are cutting the surface so the flux is probabbly zero.
+
+👨‍🏫: Right! Let's introduce the vector $\mathbf{A}$ that is perpendicular to our surface, and its length represents the area of our surface. (If a symbol is written thick then we assume that it is a vector, when not we think that it is a scalar.)
+
+<Question
+  lang="en"
+  question="Can you give a formula for the flux if this new $\mathbf{A}$ vector closes $\alpha$ angle with the electric field ($\mathbf{E}$)?"
+  options={[
+    "$EA$",
+    "$EA \\cos(\\alpha)$",
+    "$EA \\sin(\\alpha)$"
+  ]}
+  correctAnswerIndex={1}
+/>
+
+👨‍🏫: Really good! So if we want we can think of the flux as a...
+
+<Question
+  lang="en"
+  question="We can think of the flux as a... between $\mathbf{E}$ and $\mathbf{A}$ "
+  options={[
+    "scalar product",
+    "vector product",
+    "time machine (flux condensator)"
+  ]}
+  correctAnswerIndex={0}
+/>
+
+🙋‍♂️: This is really nice, but in many cases the electris field is not homogenious and our surface isn't a square. What can we do then?
+
+👨‍🏫: This is something that we do really often in physics. We might can not calculate the flux for a complex surface or a complex electric field. However what we can do is that we partition our surface into tiny regions where we can say that the surface isn't curved and the electric feild is homogenious -- with good approximation. Then we calculate the flux for all small surface elements and we sum them. So we'll end up with a formula that looks something like this.:
+
+$$
+\Phi = \sum_{i=0}^n \Delta \Phi_i = \sum_{i=0}^n \mathbf{E}_i \Delta \mathbf{A}_i
+$$
+
+So, here we partitioned our original surface into $n$ little surfaces. $\Delta \mathbf{A}_i$ denotes the $i$-th little surface and $\mathbf{E}_i$ is the electric field (as a vector) at this surface.
+
+👨‍🏫: If you are somewhat familliar with analysis than you can guess what the next stepp will be.
+
+<Question
+  lang="en"
+  question="What happens when we go to zero with the area of the biggest little surface?"
+  options={[
+    "Nothing, what would happen?",
+    "we can replace the summation with an integral",
+    "I don't know, but honestly I dont want to compute the flux for infinite times",
+    "If it goes to zero then the sum will be zero as well, so the flux for the entire surface will be zero"
+  ]}
+  correctAnswerIndex={1}
+/>
+
+👨‍🏫: Yes, so you can write the fux like this:
+
+$$
+\Phi_A = \lim_{\Delta A_i \to 0} \sum_{i = 0}^{n} \mathbf{E}_i \Delta \mathbf{A}_i = \int_A \mathbf{E} \mathbf{dA}
+$$
+
+<Question
+  lang="en"
+  question="What's the unit of electric flux?"
+  options={[
+    "it's uniteless, it is just the number of field lines passing trough the surface",
+    "it's uniteless, cause scalar product can not work with units",
+    "$Nm/C$",
+    "$N/C"
+  ]}
+  correctAnswerIndex={1}
+/>
+
+Sofar We built up our intuition on flux and saw how to formalize it to mathematically to be able to use it in more complex situation sas well. I want to pinpoint something before we go further. The intuitive image is useful but it has some flaws.
+
+1. As we know dot products can give us negative values as well. Flux can be negative. While counting fieldlines is always a non negative number.
+2. Flux isn't uniteless.
+3. Filed lines aren't an actual thing. We just use them because they are making the things more visualizable. (We discussed this arelier.)
 
