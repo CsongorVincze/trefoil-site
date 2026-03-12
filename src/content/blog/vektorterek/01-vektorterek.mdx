@@ -1,0 +1,101 @@
+---
+title: 'Vektorterek'
+description: 'Részlet a vektorterek bevezetéséből.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'linear-algebra', 'vectors']
+category: 'learn'
+lang: 'hu'
+next: { title: 'Lineáris kombináció', link: '/blog/vektorterek/02-linearis-kombinacio' }
+seriesId: 'vektorterek'
+order: 1
+---
+
+import Question from '../../../components/Question.astro';
+import ProofBox from '../../../components/ProofBox.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import Exercise from '../../../components/Exercise.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+
+
+<UnderConstruction lang="hu" />
+
+
+Note. What I write here is mostly what I've learned from my amazing teacher, Attila Andai at BME. If something is incorrect here its my fault, not he's.
+
+## Vektorterek
+
+{/* todo ilyenre lehetne megcsinalni az egyes felyezeteket: https://bruno-simon.com/ */}
+
+👨‍🏫: Elerkeztunk egy ujabb fontos reszhez. Mit tanultatok a kozepiskolaban a vektorokrol?
+
+🙋‍♂️: Hat a vektor az ilyen nyilacska a sikon vagy a terben. De kicsit formalisabban olyasmit mondtunk hogy egy iranyitott szakasz, vagy tombbe rendezett szamok.
+
+👨‍🏫: Igen, igen valoban lehet igy reprezentalni az $\mathbb{R}^{2}$-ben vagy $\mathbb{R}^{3}$-ban lako vektorokat. Emellett matematikusok megalkottak egy szabalyrendszert ami kiszelesiti a vektorok fogalmat. Gondolhatsz ugy is a dologra hogy megfigyeljuk hogy a terben lako nyilacskakra milyen szabalyok igazak, osszegyujtjuk ezeket a szabalyokat, es azok a dolgoka mikre ezek a szabalyok igazak azokat vektornak fogjuk hivni. Vagyis pontosabban azt a halmazt amire igazak ezek a szabalyok azt vektorternek, a halmaz egy elemet pedig vektornak. Van otleted hogy milyen szabalyokbol alkotjak a vektorter axiomait?
+
+🙋‍♂️: Gondolom ossze kell tudjunk adni a vektorokat. Az is jo lenne ha tudnank oket megnyujtani, tehat skalarral szorozni. Meg amugy tudtunk szorozni is vektorokat a "rendes" terben.
+
+👨‍🏫: Ezek igen jo gondolatok. Kettot kapasbol bele is rakunk a vektorter axiomaiba. Egyet viszont ki fogunk hagyni. 
+
+<Question
+  question="Szerinted melyik szabalyt hagyjuk ki a vektorterek axiomai kozul?"
+  options={[
+    "vektorok osszeadasa",
+    "vektorok megnyujtasa (skalarral valo szorzas)",
+    "ket vektor osszeszorzasa"
+  ]}
+  correctAnswerIndex={2}
+/>
+
+{/* todo le kell irni mi a test es mi a csopi */}
+
+
+
+<AxiomBox title="Vektortér Axiómák">
+
+Legyen egy $K$ test (általában $\mathbb{R}$ vagy $\mathbb{C}$). Azt mondhatjuk, hogy $V$ egy vektortér $K$ felett, ha: (az alábbiakban $u,v,w\in V$ és $\lambda,\mu\in K$)
+
+**Összeadás**
+
+Legyen
+$$
++ : V\times V \to V,\qquad (u,v)\mapsto u+v.
+$$
+A következő tulajdonságok teljesülnek:
+$$
+\begin{aligned}
+1. \quad & u+(v+w)=(u+v)+w && (\text{asszociatív}) \\
+2. \quad & u+v=v+u && (\text{kommutatív}) \\
+3. \quad & \exists\,0\in V \text{ olyan, hogy } 0+v=v \quad \forall v\in V \text{ esetén} && (\text{nullvektor}) \\
+4. \quad & \forall v\in V \text{ esetén } \exists -v\in V \text{ úgy, hogy } v+(-v)=0 && (\text{ellentett})
+\end{aligned}
+$$
+
+**Skalárral való szorzás**
+
+Legyen
+$$
+\cdot : K\times V \to V,\qquad (\lambda,v)\mapsto \lambda v.
+$$
+A következő axiómák teljesülnek:
+$$
+\begin{aligned}
+1. \quad & \lambda(\mu v)=(\lambda\mu)v && (\text{skalárasszociativitás (legalábbis olyasmi)}) \\ 
+2. \quad & \exists\,1\in K \text{ úgy, hogy } 1\cdot v = v \quad \forall v\in V \text{ esetén} && \\
+3. \quad & (\lambda+\mu)v=\lambda v + \mu v && (\text{disztributivitás a skalárok összeadására}) \\
+4. \quad & \lambda(v+u)=\lambda v + \lambda u && (\text{disztributivitás a vektorok összeadására})
+\end{aligned}
+$$
+
+</AxiomBox>
+
+**Példák vektorterekre**
+
+👨‍🏫: Probald meg belatni hogy az alabbi halmazok vektorteret alkotnak.
+
+*   $\mathbb{R}^n$, $\mathbb{C}^n$
+*   $C(\mathbb{R},\mathbb{R})$ (folytonos függvények tere)
+*   Sorozatok tere (mindenütt definiált összeadás és skalárszorzás){/* ez itt miez */}
+*   $\{0\}$ (triviális vektortér)
+{/* todo ezt itt meg nagyon szepiteni kene */}

@@ -1,0 +1,61 @@
+---
+title: 'Interior, exterior, boundary'
+description: 'Part of Multi_var_anal.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'analysis', 'topology']
+category: 'learn'
+lang: 'en'
+seriesId: 'multi-var-anal'
+order: 3
+prev: { title: 'Open spheres', link: '/blog/multi-var-anal/02-open-spheres' }
+next: { title: 'Closure', link: '/blog/multi-var-anal/04-closure' }
+---
+
+import Question from '../../../components/Question.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Interior, exterior, boundary
+
+👨‍🏫: Let's look at this potato below. What could its interior, exterior, and boundary be?
+
+🙋‍♂️: Ok. Now you intuitively understand these concepts. Let's give their definition now.
+
+<AxiomBox lang="en" title="Definition: Interior, Exterior, and Boundary Points">
+
+Let $A \subseteq \mathbb{R}^{p}$ and $x \in \mathbb{R}^{p}$. We say $x$ is an...
+
+**① Interior point** of $A$, if:
+$$
+\exists\, \varepsilon > 0 : B_{\varepsilon}(x) \subseteq A
+$$
+
+**② Exterior point** of $A$, if:
+$$
+\exists\, \varepsilon > 0 : B_{\varepsilon}(x) \subseteq A^{c}, \quad \text{where } A^{c} = \mathbb{R}^{p} \setminus A
+$$
+
+**③ Boundary point** of $A$, if:
+$$
+\forall\, \varepsilon > 0 : B_{\varepsilon}(x) \cap A \neq \emptyset \quad \text{and} \quad B_{\varepsilon}(x) \cap A^{c} \neq \emptyset
+$$
+
+The set of all interior / exterior / boundary points of $A$ is called the **interior** / **exterior** / **boundary** of $A$, denoted:
+- $\operatorname{int} A$ — interior
+- $\operatorname{ext} A$ — exterior
+- $\partial A$ — boundary
+
+</AxiomBox>
+
+### Examples
+
+👨‍🏫: Let's look at some examples now. What's the interior, exterior, boundary of:
+
+$$
+A = [5, 7[
+$$
+
+$$
+B = \left\{ (x, y) \in \mathbb{R}^{2} : x^{2} + y^{2} \leq 1 \right\}
+$$

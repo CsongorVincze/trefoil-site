@@ -1,0 +1,43 @@
+---
+title: 'Limits and continuity'
+description: 'Part of Multi_var_anal.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'analysis', 'topology']
+category: 'learn'
+lang: 'en'
+seriesId: 'multi-var-anal'
+order: 8
+prev: { title: 'Connected sets', link: '/blog/multi-var-anal/07-connected-sets' }
+next: { title: 'Two variable functions', link: '/blog/multi-var-anal/09-two-variable-functions' }
+---
+
+import Question from '../../../components/Question.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Limits and continuity
+
+👨‍🏫: When we worked with regular functions we spent a lot of time analyzing limits and identifying whether a function is continuous or not. Will we do the same here too?
+
+🙋‍♂️: Yeah, but first introduce some definitions!
+
+<AxiomBox lang="en" title="Definition: Accumulation Point">
+
+$a \in \mathbb{R}^{p}$ is an **accumulation point** of $A \subseteq \mathbb{R}^{p}$, if:
+$$
+\forall\, \varepsilon > 0 \quad \text{there are infinitely many points of } A \text{ inside } B_{\varepsilon}(a)
+$$
+
+</AxiomBox>
+
+<AxiomBox lang="en" title="Definition: Limit of a Sequence in ℝᵖ">
+
+$x \in \mathbb{R}^{p}$ is the **limit** of the sequence $(x_n) \subset \mathbb{R}^{p}$, if:
+$$
+\forall\, \varepsilon > 0 \quad \exists\, N = N(\varepsilon) : \forall n > N \quad x_n \in B_{\varepsilon}(x)
+$$
+
+</AxiomBox>
+
+👨‍🏫: Some notes to these definitions. First we had another def for limits, it's true here as well. Can you figure it out? Second, if the sequences are convergent by coordinates ($\forall x_k \text{ is convergent}$) then $x_n$ is convergent as well. Third the Bolzano-Weierstrass theorem holds here as well. Fourth $\mathbb{R}^{p}$ is a complete space because every Cauchy-sequence is convergent.

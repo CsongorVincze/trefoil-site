@@ -1,0 +1,39 @@
+---
+title: 'Lineáris függetlenség'
+description: 'Részlet a vektorterek bevezetéséből.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'linear-algebra', 'vectors']
+category: 'learn'
+lang: 'hu'
+prev: { title: 'Lineáris kombináció', link: '/blog/vektorterek/02-linearis-kombinacio' }
+next: { title: 'Bázis, dimenzio', link: '/blog/vektorterek/04-bazis-dimenzio' }
+seriesId: 'vektorterek'
+order: 3
+---
+
+import Question from '../../../components/Question.astro';
+import ProofBox from '../../../components/ProofBox.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import Exercise from '../../../components/Exercise.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Lineáris függetlenség
+
+Az $(u_i)_{i\in I}$ vektorrendszer elemei lineárisan függetlenek, ha
+$$
+\sum_{i\in I}\lambda_i u_i = 0 \quad\Longleftrightarrow\quad \forall i\in I:\; \lambda_i = 0.
+$$
+Szóban: az $(u_i)_{i\in I}$ vektorrendszer elemei akkor és csak akkor lineárisan függetlenek, ha a nullvektort előállító lineáris kombinációban szereplő összes együttható nulla.
+
+<div id="linear-independence-container" style={{display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '2rem 0'}}></div>
+<script is:inline src="/libraries/p5.min.js"></script>
+<script is:inline src="/linear_independence_sim.js"></script>
+
+**Feladatok**
+
+1. Vizsgáljuk, hogy egyetlen vektor $v\in V$ lineárisan független-e.
+2. Tegyük fel, hogy $V=\mathbb{R}^2$. Vizsgáljuk, hogy a következő két vektor lineárisan független-e:
+   $$
+   a=(0,1),\qquad b=(1,1).
+   $$

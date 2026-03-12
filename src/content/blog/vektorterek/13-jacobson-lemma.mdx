@@ -1,0 +1,126 @@
+---
+title: 'Jacobson-lemma:'
+description: 'Részlet a vektorterek bevezetéséből.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'linear-algebra', 'vectors']
+category: 'learn'
+lang: 'hu'
+prev: { title: 'Asszociatív algebra', link: '/blog/vektorterek/12-asszociativ-algebra' }
+next: { title: 'Spektralfelbontas', link: '/blog/vektorterek/14-spektralfelbontas' }
+seriesId: 'vektorterek'
+order: 13
+---
+
+import Question from '../../../components/Question.astro';
+import ProofBox from '../../../components/ProofBox.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import Exercise from '../../../components/Exercise.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Jacobson-lemma:
+
+👨‍🏫:Oooookes, most megnézünk mengint egy kicsit absztraktabb állítást. Igérem lesz kicsit földhöz ragadtabb következménye ami hasznunkra válhat.
+
+Így nagy vonalakban az állítás arról szól, hogy ha van egy egységelemes algebránk akkor aminek két eleme a és b, akkor ab spektruma nem nagyon különbözik ba spektrumától. Ez kicsit preciízebben.:
+
+Van egy $ A $ egységelemes ($ e $) algebránk. Ahol $ a, b \in A $. Ekkor:
+$$
+sp(ab) \cup \{0\} = sp(ba) \cup \{0\}
+$$
+
+Najó próbáljuk meg belátni ezt az állítást.
+
+
+
+<ProofBox title="Bizonyítás: Jacobson-lemma">
+
+$$
+\begin{aligned}
+& \text{Legyen } \lambda \notin \sigma(ab), \quad \lambda \in \mathbb{K}, \lambda \neq 0 \\
+& \text{Legyen } c := (ab - \lambda e)^{-1} \\
+& \text{TFH. } (ba - \lambda e)^{-1} = \alpha e + \beta bca \quad (\text{where } \alpha, \beta \in \mathbb{K}) \\
+\\
+& \text{Ahhoz hogy a feltétel teljesüljön: } (ba - \lambda e)(\alpha e + \beta bca) = e \\
+\\
+& \text{Kibontva:} \\
+& \alpha ba + \beta babca - \lambda \alpha e - \lambda \beta bca = e \\
+\\
+& \text{Válasszuk meg } \alpha \text{ értékét:} \\
+& -\lambda \alpha = 1 \implies \alpha = -\frac{1}{\lambda} \\
+\\
+& e\text{-vel egyszerűsítve:} \\
+& \alpha ba + \beta babca - \lambda \beta bca = 0 \\
+& b (\alpha e + \beta abc - \beta \lambda c) a = 0 \\
+& b \left( \alpha e + \beta (ab - \lambda e)c \right) a = 0 \\
+\\
+& \text{Mivel } (ab - \lambda e)c = e: \\
+& b (\alpha e + \beta e) a = 0 \\
+\\
+& \text{legyen:} \beta = \frac{1}{\lambda}
+\\
+& b (0) a = 0 \\
+& 0 = 0 \\
+& \text{Ezzel az állítást beláttuk az egyik irányba.}\\
+\\
+& \text{Másik irány feltétele: } (\alpha e + \beta bca)(ba - \lambda e) = e \\
+\\
+& \text{Kibontva:} \\
+& \alpha ba - \lambda \alpha e + \beta bcaba - \beta \lambda bca = e \\
+\\
+& a\text{ értékét megválasztva:} \\
+& -\lambda \alpha = 1 \implies \alpha = -\frac{1}{\lambda} \\
+\\
+& \text{Egyszerűsítve:} \\
+& \alpha ba + \beta bcaba - \beta \lambda bca = 0 \\
+& b (\alpha e + \beta cab - \beta \lambda c) a = 0 \\
+& b \left( \alpha e + \beta c(ab - \lambda e) \right) a = 0 \\
+\\
+& \text{Mivel:} \\
+& c = (ab - \lambda e)^{-1}, \text{ we have } c(ab - \lambda e) = e: \\
+& b (\alpha e + \beta e) a = 0 \\
+\\
+& \text{legyen:}\beta = \frac{1}{\lambda}\\
+& b (0) a = 0 \\
+& \text{Ezzel az állítást beláttuk a másik irányba is.}\\
+\end{aligned}
+$$
+
+</ProofBox>
+{/* todo itt azert csinald meg h szep legyen es a vegese kell meg egy kis magyarazat */}
+
+
+👨‍🏫: Ez a tétel és a hozzá tartozó levezetés talán kicsit absztraktnak tűnhet, de van ennek a tételnek egy hasznos következménye. Igaz-e az hogy ha van két $ n \times n $-es mátrixunk: $ A, B $ akkor: $AB = BA$ ?
+
+<Question
+  question="Mi a válasz a fönti kérdésre?"
+  options={[
+    "Igen mindig",
+    "Nem soha",
+    "Általában nem (lehet, hogy spec. esetben igen)"
+  ]}
+  correctAnswerIndex={2}
+/>
+
+👨‍🏫: Pontosan. A mátrixszorzás nem feltétlen kommutatív. A Jacobson-lemma miatt viszont beláthatjuk, hogy $ sp(AB) = sp(BA) $ ha $ A, B \in n \times n $-es mátrix. Ez elég menőőő. Habár A és B szorzata nem feltétlen kommutatív, a spektrumuk azonos. Tehát a sajátértékeik megegyeznek.
+Lássuk ezt be gyorsan:
+
+<ProofBox title="Bizonyítás: sp(AB) = sp(BA)">
+
+$$
+\begin{aligned}
+& \text{Legyen } A, B \in \mathbb{R}^{n \times n} \text{ mátrix.} \\
+& \text{Legyen } \lambda \in sp(AB). \\
+\\
+& 1. \text{ Ha } \lambda \neq 0: \\
+& \quad \text{A Jacobson-lemma miatt: } \lambda \in sp(BA). \\
+\\
+& 2. \text{ Ha } \lambda = 0: \\
+& \quad \text{Azt korábbról tudjuk, hogy: } \det(AB) = \prod_{i=1}^n \lambda_i \\
+& \quad \text{Tehát ha létezik egy } \lambda \text{ ami nulla, akkor: } \det(AB) = 0. \\
+& \quad \text{De azt is tudjuk, hogy: } \det(AB) = \det(A)\det(B) = \det(BA). \\
+& \quad \text{Tehát: } \det(BA) = 0 \implies \lambda \in sp(BA).
+\end{aligned}
+$$
+</ProofBox>
+

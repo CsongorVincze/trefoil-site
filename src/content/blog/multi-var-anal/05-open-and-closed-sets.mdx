@@ -1,0 +1,45 @@
+---
+title: 'Open and closed sets'
+description: 'Part of Multi_var_anal.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'analysis', 'topology']
+category: 'learn'
+lang: 'en'
+seriesId: 'multi-var-anal'
+order: 5
+prev: { title: 'Closure', link: '/blog/multi-var-anal/04-closure' }
+next: { title: 'Properties of open and closed sets', link: '/blog/multi-var-anal/06-properties-of-open-and-closed-sets' }
+---
+
+import Question from '../../../components/Question.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Open and closed sets
+
+👨‍🏫: Now that we have closure let's define open and closed sets.
+
+<AxiomBox lang="en" title="Definition: Open and Closed Sets">
+
+Let $A \subseteq \mathbb{R}^{p}$.
+
+**1.** $A$ is **open**, if every point of $A$ is an interior point:
+$$
+\forall x \in A : x \in \operatorname{int} A
+$$
+
+**2.** $A$ is **closed**, if its complement is open:
+$$
+A^{c} \text{ is open}
+$$
+
+Two equivalent characterizations of closed sets:
+- If $A$ is closed, then $\partial A \subseteq A$
+- $\overline{A}$ is always a closed set
+
+> Note: Not every set is open or closed. The easiest counterexample is $[0, 1[$.
+
+</AxiomBox>
+
+👨‍🏫: Let's unpack open sets a bit. Intuitively it means that however close we are to the boundary, we can always "draw" a sphere with radius $\varepsilon > 0$ that is entirely inside $A$.

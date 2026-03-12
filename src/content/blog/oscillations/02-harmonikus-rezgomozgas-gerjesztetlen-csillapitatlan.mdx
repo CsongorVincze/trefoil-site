@@ -1,0 +1,47 @@
+---
+title: 'Harmónikus rezgőmozgás (gerjesztetlen, csillapítatlan)'
+description: 'Part of Oscillations.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/blog-placeholder-3.jpg'
+tags: ['physics', 'math', 'simulation']
+category: 'learn'
+lang: 'hu'
+seriesId: 'oscillations'
+order: 2
+prev: { title: 'De mik is azok a rezgések?', link: '/blog/oscillations/01-de-mik-is-azok-a-rezgesek' }
+next: { title: 'The Physics Behind It', link: '/blog/oscillations/03-the-physics-behind-it' }
+---
+
+import Question from '../../../components/Question.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Harmónikus rezgőmozgás (gerjesztetlen, csillapítatlan)
+
+Talán ez a legegyszerűbb és egyben legprimitívebb modellje a rezgéseknek. Ennek ellenére sokszor használjuk ezt a modellt. Na de mit is jelent az, hogy harmónikus? Lényegileg annyit, hogy a megfigyelt rezgést valamilyen színuszos függvénnyel írhatjuk le. Hát ez nagyon szép, de jó lenne erre egy kézzel fogható példát látni. Na nézzük!
+{/* todo ide jo kerdes, hogy ha valamilyen rezges harmonikus akkor periodikus-e */}
+<Question
+  question="Ha egy rezgés harmonikus, akkor szükségképpen periodikus is?"
+  options={["Igen", "Nem", "Csak akkor ha nincs csillapítás"]}
+  correctAnswerIndex={0}
+/>
+
+ Vízszintes, súrlódásmentes talajon falhoz rögzítünk egy rugót és a rugó másik végéhez egy $$m$$ tömegű testet rögzítünk. A testet kitérítjük, így a rugó -- eredietileg nyujtatlan -- hossza megváltozik. Elengedjük a testet, így az rezgésbe kezd.
+{/* todo kerdes meg fog e allni a test */}
+Figyeljük meg a test kitérését az idő függvényében és ezt ábrázoljuk grafikonon. Talán már láttunk ilyesmi függvényt! Ohh igen ez egészen olyan mint egy koszinusz. Mert valójában az is!
+<div id="spring-simulation-container" style="display: flex; flex-direction: column; align-items: center; margin: 2rem 0;"></div>
+
+
+
+<script is:inline src="/libraries/p5.min.js"></script>
+<script is:inline src="/libraries/p5.sound.min.js"></script>
+<script is:inline src="/spring_no_damping_sim.js"></script>
+
+
+
+
+
+
+
+
+
+{/*  */}

@@ -1,0 +1,53 @@
+---
+title: 'Skalárszorzatos vektorterek'
+description: 'Részlet a vektorterek bevezetéséből.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'linear-algebra', 'vectors']
+category: 'learn'
+lang: 'hu'
+prev: { title: 'Linearis alter, linearis burok', link: '/blog/vektorterek/05-linearis-alter-linearis-burok' }
+next: { title: 'Caucy-Schwarz-Bunyakowskij egyenlotlenseg es vektorok altal bezart szog', link: '/blog/vektorterek/07-caucy-schwarz-bunyakowskij-egyenlotlenseg-es-vektorok-altal-bezart-szog' }
+seriesId: 'vektorterek'
+order: 6
+---
+
+import Question from '../../../components/Question.astro';
+import ProofBox from '../../../components/ProofBox.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import Exercise from '../../../components/Exercise.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Skalárszorzatos vektorterek
+
+🙋‍♂️: Várjunk csak, a 3 dimenziós térben tudtunk vektorokat szorozni pl.: skalárisan vagy vektoriálisan. Ezt a tulajdonságot nem általánosítottuk?
+
+👨‍🏫: Ez egy nagyon ügyes észrevétel! (jár érte egy csoki) A vektorterekre adott általános definíciónk valóban nem foglalja magába a vektorok szorzását. Azonban egyes vektorterekben létezik skaláris szorzás ezeket a vektortereket -- nagyon meglepő módon -- skalárszorzatos vektortereknek nevezzük. Például ahogy láttuk a sík ($\mathbb{R}^2$) vektorteret alkot (a valós számtest fölött), és a síkon 2 vektornak létezik skaláris szorzata.
+
+🙋‍♂️: Hmm... Es mi a helyzet a folytonos függvényekkel azok is vektorteret alkotnak, nem? Ott nem tudom csak úgy összeszorozni a vektorok komponenseit mint egy ($\mathbb{R}^n$)-es vektortérben. Akkor itt nincs skaláris szorzás?
+
+👨‍🏫: Igen igen, ez egy nehézség. Ha emlékszel a középiskolában tanult vektorról alkotott kép valami olyasmi volt, hogy egy síkon vagy egy térben lakó nyilacska vagy egymás alá pakolt számok. Amikor bevezettük a vektortereket valahogy megvizsgáltuk, hogy milyen belső tulajdonságokkal bírnak a ezek a vektorok. Ezeket a tulajdonságokat megtartottuk és ezekből megalkottuk a vektortér axiómáit. Most valami hasonlót fogunk csinálni a skalárszorzással is. Vajon milyen tulajdonságai vannak a síkon vett standard skalárszorzásnak?
+
+🙋‍♂️: Gondolkozzunk... Vegyünk két vektort, mondjuk $a$-t és $b$-t. 1. Ha $a$ hosszát 2-szeresére növelem akkor a skalárszorzat is kétszer akkora lesz. Ezt geometriailag láthatjuk. 2. Ha veszünk egy harmadik vektort, mondjuk $c$-t, akkor ha $a + b$-t skalárisan szorozzuk $c$-vel az igazából ugyan olyan mintha először $a$-t szoroztuk volna $c$-vel és aztán ehhez hozzáadtuk volna $b$ és $c$ saklárszorzatát. Ezt pedig onnét tudhatjuk, hogy ha kibontjuk a skalárszorzatot komponensekre akkor ott már a szorzás disztributív a valós számokon és utána átrendezzük az összeget. 3. Hogyha $a$-t önmagával skalárszorozzuk akkor biztos, hogy egy pozitív számot kapunk, feltéve persze, hogy $a$ nem nullvektor. Hmmm... nem tudom mi van még. Ja igen talán még egy. 4. Felcserélhetjük a szorzás sorrendjét és ugyan azt az eredményt kapjuk. Tehát $a$ szor $b$ = $b$ szer $a$
+
+👨‍🏫: Wooow, nagyon jo ügyesen megfigyelted ezeket a tulajdonságokat! Persze egy kis kiegészítésre azért szükség lesz, ha a vektorterünket esetleg komplex számtest felett akarjuk definiálni, de alapvetően elég hasonló marad a szitu ahhoz amit mondtál. (Használjuk a $ \langle \cdot, \cdot \rangle $ jelölést.)
+
+{/* todo ide johetne kérdés */}
+
+Skalárszorzat feltétele egy vektortérben:
+
+1. $ \langle a, b \rangle = \overline{\langle b, a \rangle} $
+2. $ \langle \lambda a, b \rangle = \bar{\lambda} \langle a, b \rangle $
+3. $ \langle a + b, c \rangle = \langle a, c \rangle + \langle b, c \rangle $
+4. $ \langle a, a \rangle > 0 $ ha a nem a nullvektor
+5. $ \langle a, a \rangle = 0 $ ha a a nullvektor
+
+🙋‍♂️: Oké, hogy segít ez nekünk a folytonos függvényeken értelmezni a skalárszorzást? Nézhetnénk erre egy példát?
+
+👨‍🏫: Azt már korábban beláttuk, hogy a folytonos függvények a $[0, 1]$ intervallumon vektorteret alkotnak. tekintsük a következő skaláris szorzást:
+
+$ \langle f, g \rangle = \int_{0}^{1}f(x)g(x) \, dx $
+
+ha lecsekkolod a fent említett kritériumokat rájössz, hogy ez egy valid skaláris szorzás ezen a vektortéren.
+{/* todo ezt itt lehet levezethetnem */}
+

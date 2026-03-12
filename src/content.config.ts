@@ -15,7 +15,11 @@ const blog = defineCollection({
 			heroImage: image().optional(),
 			tags: z.array(z.string()).optional(),
 			category: z.enum(['blog', 'learn']).optional().default('blog'),
-		lang: z.enum(['hu', 'en']).optional().default('hu'),
+			lang: z.enum(['hu', 'en']).optional().default('hu'),
+			prev: z.object({ link: z.string(), title: z.string() }).optional(),
+			next: z.object({ link: z.string(), title: z.string() }).optional(),
+			seriesId: z.string().optional(),
+			order: z.number().optional(),
 		}),
 });
 

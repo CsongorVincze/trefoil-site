@@ -1,0 +1,74 @@
+---
+title: 'Caucy-Schwarz-Bunyakowskij egyenlotlenseg es vektorok altal bezart szog'
+description: 'Részlet a vektorterek bevezetéséből.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'linear-algebra', 'vectors']
+category: 'learn'
+lang: 'hu'
+prev: { title: 'Skalárszorzatos vektorterek', link: '/blog/vektorterek/06-skalarszorzatos-vektorterek' }
+next: { title: 'Normak', link: '/blog/vektorterek/08-normak' }
+seriesId: 'vektorterek'
+order: 7
+---
+
+import Question from '../../../components/Question.astro';
+import ProofBox from '../../../components/ProofBox.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import Exercise from '../../../components/Exercise.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Caucy-Schwarz-Bunyakowskij egyenlotlenseg es vektorok altal bezart szog
+
+👨‍🏫: Vegyunk a megszokott sikon ket vektort. Itt mindenki szamara egyertelmu hogy mi a ket vektor altal bezart szog. Akar foghatunk egy szogmerot is es leolvashatjuk a szoget. Na de vegyuk most a folytonos fuggvenyek vektorteret. Itt mi a helyzet, hogy hatarozzuk meg ebben a vektorterben lako ket vektor altal bezart szoget?
+
+🙋‍♂️: Ha jol emlekszem a szog valahogy kapcsolatban allt a skalarszorzassal. Ki tudnank esetleg azt hasznalni?
+
+👨‍🏫: Nem is rossz otlet! Kicsit tavolabbrol fogok elindulni de vegul ide fogunk kilyukadni. Ha van egy skalarszorzatos vektorterunk akkor abban mindig fennall egy nagyon fontos egyenlotlenseg.:
+
+$$
+| \langle x, y \rangle | \leq \|x\| \|y\|
+$$
+
+(Itt $ \|x\| := \sqrt{\langle x, x \rangle} $ kesobb be fogjuk latni, hogy $ \|x\| $ a skalarszorzat altal indukalt normaja $ x $-nek. Most egyelore viszont csak egy jelolesbeli egyszerusites.) Ez egy tok hasznos egyenlotlenseg. Ezt fogjuk hasznalni a vektorok altal bezart szog definialasara is mellesleg. Lenyegileg annyit mont ki, hogy ha van ket vektorunk akkor azoknak a skalarszorzata biztos, hogy kisebb vagy egyenlo, mint ha a ket vektort onmagukkal skalarszorozzuk, es aztan a skalarszorzatokat osszeszorozzuk.
+
+{/* todo ami ezalatt ki van kommentelve az nem teljesen igaz */}
+{/* 
+🙋‍♂️: Ahaa. Eeees akarmilyen normat hasznalhatok? Peldaul a p-normak kozul megvalaszthatom a p erteket 14-nek?
+
+👨‍🏫: Nagyon jo kerdes! Itt fontos megemliteni, hogy mindig a skalarszorzas altal indukalt normat hasznaljuk az egyenlotlensegben. Kiprobalhatod peldaul a sikon az $ (1, 1), (2, 2) $ vektorokon a szokasos skalarszorzassal es a vegtelen normaval. Nem fog mukodni az egyenlotlenseg. Na de ha mar itt vagyunk lassuk is be gyorsan ezt az egyenlotlenseget! */}
+
+<ProofBox title="C.S.B. bizonyitas">
+$$
+\begin{aligned}
+& \|x - \lambda y\| \ge 0 \\
+& (\text{ahol } \forall x, y \in V, \forall \lambda \in K, y \neq 0) \\
+\\
+& \text{A skalarszorzatot visszairva:} \\
+& \langle x - \lambda y, x - \lambda y \rangle \ge 0 \\
+\\
+& \text{Kibontva:} \\
+& \langle x, x \rangle - \langle x, \lambda y \rangle - \langle \lambda y, x \rangle + \langle \lambda y, \lambda y \rangle \ge 0 \\
+& \|x\|^2 - \lambda \langle x, y \rangle - \bar{\lambda} \langle y, x \rangle + |\lambda|^2 \|y\|^2 \ge 0 \\
+\\
+& \text{Mivel minden } \lambda\text{-ra igaz az egyenlőtlenség,} \\
+& \text{így legyen: } \lambda = \frac{\langle y, x \rangle}{\|y\|^2} \\
+\\
+& \text{Behelyettesítve:} \\
+& \|x\|^2 - \frac{\langle y, x \rangle \langle x, y \rangle}{\|y\|^2} - \frac{\overline{\langle y, x \rangle}\langle y, x \rangle}{\|y\|^2} + \frac{|\langle y, x \rangle|^2 \|y\|^2}{\|y\|^4} \ge 0 \\
+\\
+& \text{Kihasználjuk a komplex szám és konjugáltjára} \\
+& \text{vonatkozó összefüggést: } (z \bar{z} = |z|^2) \\
+& \|x\|^2 - \frac{|\langle y, x \rangle|^2}{\|y\|^2} - \frac{|\langle y, x \rangle|^2}{\|y\|^2} + \frac{|\langle y, x \rangle|^2}{\|y\|^2} \ge 0 \\
+\\
+& \text{Összevonás után:} \\
+& \|x\|^2 - \frac{|\langle y, x \rangle|^2}{\|y\|^2} \ge 0 \\
+& \|x\|^2 \ge \frac{|\langle y, x \rangle|^2}{\|y\|^2} \\
+& \|x\|^2 \|y\|^2 \ge |\langle x, y \rangle|^2 \\
+\\
+& \text{Gyökvonás után:} \\
+& |\langle x, y \rangle| \le \|x\| \|y\|
+\end{aligned}
+$$
+</ProofBox>
+

@@ -1,0 +1,37 @@
+---
+title: 'Open spheres'
+description: 'Part of Multi_var_anal.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'analysis', 'topology']
+category: 'learn'
+lang: 'en'
+seriesId: 'multi-var-anal'
+order: 2
+prev: { title: 'The topology of $\mathbb{R}^{p}$', link: '/blog/multi-var-anal/01-the-topology-of-mathbb-r-p' }
+next: { title: 'Interior, exterior, boundary', link: '/blog/multi-var-anal/03-interior-exterior-boundary' }
+---
+
+import Question from '../../../components/Question.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Open spheres
+
+👨‍🏫: Good, we can move on and play with balls.
+
+<AxiomBox lang="en" title="Definition: Open ball">
+
+Let $a \in \mathbb{R}^{p}$ and $\varepsilon > 0$. The **open ball** of radius $\varepsilon$ centered at $a$ is:
+
+$$
+B_{\varepsilon}(a) = \left\{ x \in \mathbb{R}^{p} : \|x - a\| < \varepsilon \right\}
+$$
+
+</AxiomBox>
+
+👨‍🏫: What could this definition mean?
+
+🙋‍♂️: Hmm... I guess $B_{\varepsilon}(a)$ is the set of points in $\mathbb{R}^{p}$ that lie within the sphere of radius $\varepsilon$ centered around $a$.
+
+👨‍🏫: Good! We call this an **open** ball because the points that are at a distance of $\varepsilon$ from $a$ are **not** in $B_{\varepsilon}(a)$. You can think of it like a peeled orange.

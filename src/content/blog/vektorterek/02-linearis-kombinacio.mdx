@@ -1,0 +1,31 @@
+---
+title: 'Lineáris kombináció'
+description: 'Részlet a vektorterek bevezetéséből.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'linear-algebra', 'vectors']
+category: 'learn'
+lang: 'hu'
+prev: { title: 'Vektorterek', link: '/blog/vektorterek/01-vektorterek' }
+next: { title: 'Lineáris függetlenség', link: '/blog/vektorterek/03-linearis-fuggetlenseg' }
+seriesId: 'vektorterek'
+order: 2
+---
+
+import Question from '../../../components/Question.astro';
+import ProofBox from '../../../components/ProofBox.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import Exercise from '../../../components/Exercise.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Lineáris kombináció
+
+👨‍🏫: Mivel a vektorter zart az osszeadasra, igy az $I$ indexhalmazon
+1. $\forall i\in I:\; u_i\in V$,
+2. $\forall i\in I:\; \lambda_i\in K$,
+
+akkor
+$$
+v=\sum_{i \in I}\lambda_i u_i \in V.
+$$
+Ekkor azt mondjuk, hogy $\sum_{i\in I}\lambda_i u_i$ az $(u_i)_{i\in I}$ vektorok valamely lineáris kombinációja.

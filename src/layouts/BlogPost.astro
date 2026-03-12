@@ -11,7 +11,7 @@ type Props = CollectionEntry<'blog'>['data'] & {
 	headings?: { depth: number; slug: string; text: string }[];
 };
 
-const { title, description, pubDate, updatedDate, heroImage, headings } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, headings, prev, next, order } = Astro.props;
 ---
 
 <html lang="en">
@@ -63,6 +63,28 @@ const { title, description, pubDate, updatedDate, heroImage, headings } = Astro.
 			body {
 				background-color: black;
 			}
+			.post-navigation {
+				display: flex;
+				justify-content: space-between;
+				margin-top: 3em;
+				padding-top: 1em;
+				border-top: 1px solid rgba(255, 255, 255, 0.2);
+			}
+			.post-navigation a {
+				text-decoration: none;
+				color: #fff;
+				background-color: rgba(255, 255, 255, 0.1);
+				padding: 0.8em 1.2em;
+				border-radius: 8px;
+				font-weight: bold;
+				transition: background-color 0.2s;
+			}
+			.post-navigation a:hover {
+				background-color: rgba(255, 255, 255, 0.2);
+			}
+			.next-link {
+				margin-left: auto;
+			}
 		</style>
 	</head>
 
@@ -71,7 +93,7 @@ const { title, description, pubDate, updatedDate, heroImage, headings } = Astro.
 		<main>
 			<article>
 				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" class={heroImage.src.includes('sponge') ? 'round-style' : ''} />}
+					{heroImage && (!order || order === 1) && <Image width={1020} height={510} src={heroImage} alt="" class={heroImage.src.includes('sponge') ? 'round-style' : ''} />}
 				</div>
 				<div class="prose">
 					<div class="title">
@@ -88,8 +110,20 @@ const { title, description, pubDate, updatedDate, heroImage, headings } = Astro.
 						<h1>{title}</h1>
 						<hr />
 					</div>
-					{headings && headings.length > 0 && <PostGraph headings={headings} />}
 					<slot />
+					
+					<div class="post-navigation">
+						{prev ? (
+							<a href={prev.link} class="prev-link">
+								&larr; {prev.title}
+							</a>
+						) : <div></div>}
+						{next && (
+							<a href={next.link} class="next-link">
+								{next.title} &rarr;
+							</a>
+						)}
+					</div>
 				</div>
 			</article>
 		</main>

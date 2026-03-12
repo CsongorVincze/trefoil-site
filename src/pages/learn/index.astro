@@ -8,7 +8,7 @@ import { SITE_TITLE } from '../../consts';
 
 const allPosts = await getCollection('blog');
 const learnPosts = allPosts
-  .filter((p) => p.data.category === 'learn')
+  .filter((p) => p.data.category === 'learn' && !p.data.prev)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 // Tag → label map for display
@@ -19,6 +19,14 @@ const topicLabels: Record<string, string> = {
   'physics':        'Physics',
   'simulation':     'Simulation',
   'math':           'Mathematics',
+};
+
+// Series titles for grouping
+const seriesTitles: Record<string, string> = {
+  'vektorterek': 'Vektorterek',
+  'multi-var-anal': 'Multivariable Analysis',
+  'oscillations': 'Rezgések (Oscillations)',
+  'electro': 'Electrostatics'
 };
 
 // Icon per first-tag group
@@ -62,7 +70,7 @@ function iconForPost(tags: string[] = []) {
                     <span class="tag">{topicLabels[t] ?? t}</span>
                   ))}
                 </div>
-                <h2 class="card-title">{post.data.title}</h2>
+                <h2 class="card-title">{post.data.seriesId && seriesTitles[post.data.seriesId] ? seriesTitles[post.data.seriesId] : post.data.title}</h2>
                 <p class="card-desc">{post.data.description}</p>
                 <p class="card-date">
                   <FormattedDate date={post.data.pubDate} />

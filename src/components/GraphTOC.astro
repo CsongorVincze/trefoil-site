@@ -7,6 +7,8 @@ interface Node {
   val: number;
   type: 'post' | 'tag';
   slug?: string;
+  seriesId?: string;
+  order?: number;
   x?: number;
   y?: number;
   __bckgDimensions?: number[];
@@ -28,18 +30,42 @@ posts.forEach((post) => {
   nodes.push({
     id: post.id,
     name: post.data.title,
-    val: 20, // larger size for posts
+    val: post.data.seriesId ? (post.data.order === 1 ? 25 : 15) : 20,
     type: 'post',
-    slug: post.id
+    slug: post.id,
+    seriesId: post.data.seriesId,
+    order: post.data.order
   });
 
   if (post.data.tags) {
     post.data.tags.forEach(tag => {
-      tagsSet.add(tag);
-      links.push({
-        source: post.id,
-        target: tag
-      });
+      // Connect only standalone posts or the first chapter of a series to tags to avoid clutter
+      if (!post.data.order || post.data.order === 1) {
+        tagsSet.add(tag);
+        links.push({
+          source: post.id,
+          target: tag
+        });
+      }
+    });
+  }
+});
+
+// Connect chapters in a sequence
+const seriesMap = new Map<string, Node[]>();
+nodes.filter(n => n.type === 'post' && n.seriesId).forEach(n => {
+  if (!seriesMap.has(n.seriesId!)) {
+    seriesMap.set(n.seriesId!, []);
+  }
+  seriesMap.get(n.seriesId!)!.push(n);
+});
+
+seriesMap.forEach((chapterNodes, seriesId) => {
+  chapterNodes.sort((a, b) => (a.order || 0) - (b.order || 0));
+  for (let i = 0; i < chapterNodes.length - 1; i++) {
+    links.push({
+      source: chapterNodes[i].id,
+      target: chapterNodes[i + 1].id
     });
   }
 });
@@ -66,16 +92,20 @@ const graphData = { nodes, links };
   const Graph = ForceGraph()(elem)
     .graphData(graphData)
     .nodeLabel('name')
-    .nodeColor(node => node.type === 'post' ? '#a78bfa' : '#4ade80') // Purple for posts, Green for tags
+    .nodeColor(node => {
+      if (node.type === 'tag') return '#4ade80';
+      if (node.order === 1) return '#f472b6'; // pinkish for entry points
+      return '#a78bfa'; // purple for other posts
+    })
     .nodeVal('val')
     .linkColor(() => '#ffffff50') // Semi-transparent white links
+    .linkDirectionalArrowLength(link => link.target.type === 'tag' || link.source.type === 'tag' ? 0 : 5)
+    .linkDirectionalArrowRelPos(1)
     .backgroundColor('#00000000') // Transparent background
     .onNodeClick(node => {
       if (node.type === 'post') {
         window.location.href = `/blog/${node.slug}`;
       } else {
-        // Optional: Filter by tag or zoom in?
-        // For now, just focus or highlight?
         Graph.centerAt(node.x, node.y, 1000);
         Graph.zoom(8, 2000);
       }
@@ -111,7 +141,7 @@ const graphData = { nodes, links };
       ctx.beginPath();
       // Keep original rendering logic
       if(node.type === 'post') {
-            ctx.fillStyle = '#646cff';
+            ctx.fillStyle = node.order === 1 ? '#db2777' : '#646cff';
             ctx.arc(node.x, node.y, r, 0, 2 * Math.PI, false);
             ctx.fill();
       } else {

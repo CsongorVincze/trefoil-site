@@ -1,0 +1,79 @@
+---
+title: 'The topology of $\mathbb{R}^{p}$'
+description: 'Part of Multi_var_anal.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'analysis', 'topology']
+category: 'learn'
+lang: 'en'
+seriesId: 'multi-var-anal'
+order: 1
+next: { title: 'Open spheres', link: '/blog/multi-var-anal/02-open-spheres' }
+---
+
+import Question from '../../../components/Question.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+
+
+<UnderConstruction lang="en" />
+
+Note. What I write here is mostly what I've learned from my amazing teacher, Katalin Nagy at BME. If something is incorrect here its my fault, not her's.
+
+Hello and welcome! We have arrived to another interesting math topic! **Multivariable analysis**. This is a really important field. It is used in physics a lot, and it is one of the key concepts to understand machine learning. So let's roll up our sleeves and jump right in!
+
+## The topology of $\mathbb{R}^{p}$
+
+👨‍🏫: Ok ok, in order to deeply understand this field we have to put down the basics and define some stuff. It will be a little boring, but it's necessary to arrive to the interesting and beautiful part. So, let's do that!
+
+
+👨‍🏫: If we have a point in $\mathbb{R}^{p}$ we can denote it by:
+
+$$
+x = (x_1, x_2, \dots, x_p)
+$$
+
+So the point $x$ is a vector and $x_k$ is the $k$-th component of the vector. Lucky for us we can measure distances in $\mathbb{R}^{p}$ and it's really similar to how we measure distance in a plane (in $\mathbb{R}^{2}$).
+
+<Question
+  lang="en"
+  question="If we are in ℝᵖ what could be the formula for measuring the length of a vector?"
+  options={[
+    "$\\sqrt{x_1^{2} + x_2^{2} + \\dots + x_p^{2}}$",
+    "$\\sqrt{x_1 + x_2 + \\dots + x_p}$",
+    "$\\sqrt[p]{x_1^{p} + x_2^{p} + \\dots + x_p^{p}}$"
+  ]}
+  correctAnswerIndex={0}
+/>
+{/* todo difference between norm and distance */}
+👨‍🏫: Yeah so it's resembles to the Pythagorean theorem, but in higher dimension.
+
+🙋‍♂️: But why does the "normal" square root method work, why don't we use $p$-th root?
+
+$$
+\sqrt[p]{x_1^{p} + x_2^{p} + \dots + x_p^{p}}
+$$
+
+👨‍🏫: You can think of this as the following: First, you only care about the first two components $x_1, x_2$. You can apply the Pythagorean theorem (if you work in an orthonormal basis). After this, you take the result and the new component $x_3$ and do the same. If you repeat this until $x_p$ you'll get this formula: $\sqrt{x_1^{2} + x_2^{2} + \dots + x_p^{2}}$ and the result is the length of $x$ which we denote: $\|x\|$.
+
+<AxiomBox lang="en" title="Norm (Euclidean)">
+
+For $x = (x_1, x_2, \dots, x_p) \in \mathbb{R}^{p}$, the **Euclidean norm** of $x$ is:
+
+$$
+\|x\| = \sqrt{x_1^{2} + x_2^{2} + \dots + x_p^{2}}
+$$
+
+</AxiomBox>
+
+<Question
+  lang="en"
+  question="What other distances would be beneficial to use?"
+  options={[
+    "Only the standard Euclidean distance exists",
+    "There are others, e.g. Manhattan distance, max norm",
+    "Distance cannot be measured in ℝᵖ"
+  ]}
+  correctAnswerIndex={1}
+/>

@@ -1,0 +1,311 @@
+---
+title: 'Muveletek matrixokkal'
+description: 'Részlet a vektorterek bevezetéséből.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'linear-algebra', 'vectors']
+category: 'learn'
+lang: 'hu'
+prev: { title: 'Linearis lekepezesek', link: '/blog/vektorterek/10-linearis-lekepezesek' }
+next: { title: 'Asszociatív algebra', link: '/blog/vektorterek/12-asszociativ-algebra' }
+seriesId: 'vektorterek'
+order: 11
+---
+
+import Question from '../../../components/Question.astro';
+import ProofBox from '../../../components/ProofBox.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import Exercise from '../../../components/Exercise.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Muveletek matrixokkal
+
+
+<div id="spongebob-matrix-container" style={{display: 'flex', justifyContent: 'center', margin: '2rem 0', minHeight: '600px'}}></div>
+<script is:inline src="/spongebob_matrix_sim.js"></script>
+
+
+### 3D Transzformáció (Bónusz)
+Próbáld ki a transzformációkat 3D-ben is Spongyabobon!
+[Kattints ide a 3D szimuláció megtekintéséhez](/spongebob_3d)
+
+### Osszeadas, skalarral szorzas
+
+👨‍🏫: Menjunk tovabb, es nezegessuk meg, hogy milyen muveleteket tudunk vegrehajtani linearis lekepzesek matrixaval. Eloszor nezzuk meg ket matrix osszeadasat es skalarral valo szorzasat. Van otleted hogy, hogyan adunk ossze ket matrixot? 
+
+🙋‍♂️: Szamomra az lenne az intuitiv, ha elemenkent osszeadnank. Szorzasnal pedik minden elemet megszoroznank a kivant sakalarral.
+
+👨‍🏫: Jo otlet. Valoban igy definialjuk matrixok osszeadasat es skalarral valo szorzasat. Egy dologra azert megis figyelnunk kell az osszeadasnal. Mi lehet ez?
+
+<Question
+  question="Mire kell figyeljunk matrixok osszeadasanal?"
+  options={[
+    "Az osszeadas csak a valos matrixokon ertelmezett",
+    "Ez egy becsapos kerdes, akarmilyen matrixot ossze lehet adni",
+    "Legyen a ket matrix alakja ugyan olyan (n x m -es) ",
+    "Mindket linearis lekepezes (amikbol kepeztuk a matrixokat) ugyanabbol az U vt.-bol kepezzen ugyanabba a V vt.-be"
+  ]}
+  correctAnswerIndex={3}
+/>
+
+🙋‍♂️: Miert nem eleg, hogy ha ugyanolyan a ket matrix alakja. Ekkor ossze tudom oket adni, nem?
+
+👨‍🏫: Igen, formalisan ossze lehet oket adni, de ha arra gondolsz hogy hogyan definialtuk a linearis lekepezesek osszeadasat akkor vilagossa valik a dolog. $ (A + B)(v) =  A(v) + B(v) $ Ha az $A$ es a $B$ lin. lekepezes mas vektorterbe kepez akkor $ A(v) + B(v) $ nem definialt. Na meg persze ha a lin. lekepezesek ertekkeszletekent szolgalo vektorterek is masak akkor meg nehezen tudjak a lin. lekepezesek "megenni" ugyanazt a $V$ vektort. Kicsit olyan ez mintha az 5 m/s-ot szeretned lehuteni. Vagy ossze akarnal adni 6kg-ot 4 oraval. Nincs igazan ertleme a dolognak.
+{/* todo itt azert note h. programozasnal mi tortenik matrixok osszeadasakor */}
+
+👨‍🏫: Tehat ha van $ A, B : U \rightarrow V $ lin. lekepezesunk es $ \lambda \in \mathbb{K} $ skalarunk akkor a kovetkezok igazak, $A$ es $B$ matrixaira:
+
+$$
+([A] + [B])_{ij} = [A]_{ij} + [B]_{ij}\\
+\quad\\
+(\lambda [A])_{ij} = \lambda [A]_{ij}
+$$
+
+Tehat valoban komponensenkent vegezzuk el a matrixok osszeadasat es skalarral valo szorzasat.
+
+### Matrixok szorzasa
+
+👨‍🏫: Szerinted, hogy kell ket matrixot osszeszorozni?
+
+🙋‍♂️: Hat gondolom az elso matrix $(i,j)$-ik elemet osszeszorzom a masodik matrix $(i,j)$ elemevel es ez lesz az uj matrix erteke az $(i,j)$-ik helyen.
+
+👨‍🏫: Igen ez nem egy rossz gondolat, de nem igy definialjuk a matrixszorzast. Ket matrix szorzatat a hozzajuk tartozo linearis lekepezesek kompoziciojanak matrixakent definialunk. Ez igy eslore bonyolultnak tunhet, de nezzuk meg a bizonyitast!
+
+{/* 👨‍🏫: Jogos a kérdés! De emlékezz vissza, hogyan definiáltuk a mátrixot. A mátrix a lineáris leképezés reprezentációja egy adott bázisban. Ha két mátrixot összeszorzunk, az valójában két lineáris leképezés **kompozíciójának** (egymásutánjának) felel meg. Nézzük meg, hogy matematikailag mi történik, ha egy $u$ vektort először átküldünk a $B$ leképezésen, majd az eredményt az $A$ leképezésen! */}
+
+<ProofBox title="Mátrixszorzás származtatása">
+
+Legyenek adottak a következő terek és bázisok:
+$U: u_1, \dots, u_n$
+$V: v_1, \dots, v_m$
+$W: w_1, \dots, w_l$
+
+És a leképezések:
+$B: U \to V$
+$A: V \to W$
+
+A célunk meghatározni az $(A \circ B)$ kompozíció mátrixát.
+Induljunk ki egy tetszőleges $x \in U$ vektorból:
+$$
+x = \sum_{i=1}^n x_i u_i
+$$
+
+Hassunk rá a kompozícióval:
+$$
+\begin{aligned}
+(A \circ B)(x) &= A(B(x)) \\
+&= A\left( B\left( \sum_{i=1}^n x_i u_i \right) \right)
+\end{aligned}
+$$
+
+Használjuk ki a $B$ linearitását:
+$$
+A\left( \sum_{i=1}^n x_i B(u_i) \right)
+$$
+
+Tudjuk, hogy $B(u_i)$ kifejezhető a $V$ bázisvektoraival (ez a $B$ mátrixának definíciója):
+$B(u_i) = \sum_{j=1}^m B_{ji} v_j$
+
+Helyettesítsük be:
+$$
+A\left( \sum_{i=1}^n x_i \left[ \sum_{j=1}^m B_{ji} v_j \right] \right)
+$$
+
+Most használjuk ki az $A$ linearitását:
+$$
+\sum_{i=1}^n x_i \sum_{j=1}^m B_{ji} A(v_j)
+$$
+
+Végül fejtsük ki $A(v_j)$-t a $W$ bázisvektoraival:
+$A(v_j) = \sum_{k=1}^l A_{kj} w_k$
+
+$$
+\sum_{i=1}^n x_i \sum_{j=1}^m B_{ji} \left( \sum_{k=1}^l A_{kj} w_k \right)
+$$
+
+Rendezzük át az összegeket, hogy lássuk az új, kompozícióhoz tartozó mátrixot (ami $x_i$-ből csinál együtthatót $w_k$-hoz):
+$$
+\sum_{i=1}^n x_i \sum_{k=1}^l \underbrace{\left( \sum_{j=1}^m A_{kj} B_{ji} \right)}_{ (AB)_{ki} } w_k
+$$
+
+</ProofBox>
+
+👨‍🏫: Látod a zárójeles részt? $\sum_{j=1}^m A_{kj} B_{ji}$. Ez pontosan azt jelenti, hogy az eredmény ($AB$) mátrix $k$-adik sorának és $i$-edik oszlopának metszéspontjában lévő elemét úgy kapjuk, hogy az $A$ $k$-adik sorát skalárisan szorozzuk a $B$ $i$-edik oszlopával. Innen jön a "sor-szor-oszlop" szabály!
+{/* todo ezt is atnezni */}
+
+👨‍🏫: Na nezzunk meg erre egy kezzel foghato peldat!
+
+$$
+\begin{bmatrix}
+1 & 2 \\
+3 & 4
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+0 & 1 \\
+1 & 0
+\end{bmatrix}
+= ?
+$$
+
+<Exercise
+  problem="Számold ki a fenti mátrixszorzás eredményét!"
+  solution={[[2, 1], [4, 3]]}
+/>
+
+Na nezzunk meg meg egy matrixot!
+
+$$
+\begin{bmatrix}
+1 & 5 \\
+7 & 9 \\
+3 & 1
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+-3 & 4 \\
+0 & -2
+\end{bmatrix}
+$$
+
+{/* todo ez itt */}
+
+<Exercise
+  problem="Számold ki a fenti mátrixszorzás eredményét!"
+  solution={[[-3, -6], [-21, 10], [-9, 10]]}
+/>
+
+👨‍🏫: Most hogy rajottunk, hogy ket matrixot nem elemenkent szorzunk ossze hanem a fent megkapott szabaly szerint, mit gondolsz kommutativ-e a matrixszorzas?
+
+🙋‍♂️: Hmm nemtudom. Nezzunk meg egy peldat.
+
+$$
+\begin{bmatrix}
+1 & 2 \\
+3 & 4
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+5 & 6 \\
+7 & 8
+\end{bmatrix}
+= 
+\begin{bmatrix}
+19 & 22 \\
+43 & 50
+\end{bmatrix}
+\\
+\quad \\
+\text{ugyanez forditva:}
+\\
+\quad \\
+\begin{bmatrix}
+5 & 6 \\
+7 & 8
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+1 & 2 \\
+3 & 4
+\end{bmatrix}
+= 
+\begin{bmatrix}
+23 & 34 \\
+31 & 46
+\end{bmatrix}
+
+$$
+
+🙋‍♂️: Ugy tunik, hogy nem ugyan azt az eredmenyt kaptuk, erdekes. Szoval a matrix szorzas nem kommutativ.
+
+👨‍🏫: Nagyon joo. A matrix szorzas valoban nem feltetlen kommutativ. Ugyes modszer volt amit csinaltal. Sokszor amikor valaminek a tulajdonsagait vizsgaljuk erdemes kiprobalni azt a tulajdonsagot egy peldan. És ha mar csak egy példán nem müködik, már akkor általánosan nem igaz az adott tulajdonság. Adok viszont egy trukkosebb feladatot. Korabban mar belattuk, hogy R^2ben egy 2×2es matrix a sik transzformaciojanak felel meg. Igy be tudnad-e latni geometriai ervelessel, hogy a matrixszorzas nem feltetlen kommutativ?
+
+🙋‍♂️: Vegyunk a sikon a (3,0) pontot es mondjuk szinezzuk pirosra. Vegyuk a (0,2) pontot es szinezzuk sargara. Most vegyunk ket linearis lekepzest. Az egyik (B) forgasson pozitiv iranyba 90 fokkal a pozitiv iranyba, a masik (A) pedig vetitsen az x tengelyre. Ha eloszor hattatjuk A-t aztan B-t akkor a sarga pont az origoba kerul a piros pedig fel, ha viszont forditva hattatjuk eloszor B-t aztan A-t akkor a piros pont lesz az origoban a sarga pont pedig bal oldalon.
+
+<div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '2rem 0'}}>
+  <div style={{display: 'flex', gap: '10px', marginBottom: '1rem'}}>
+    <button id="btn-AB" style={{padding: '8px 16px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer'}}>A then B (Vetítés → Forgatás)</button>
+    <button id="btn-BA" style={{padding: '8px 16px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer'}}>B then A (Forgatás → Vetítés)</button>
+    <button id="btn-reset" style={{padding: '8px 16px', backgroundColor: '#f44336', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer'}}>Reset</button>
+  </div>
+  <div id="commutativity-sim-container" style={{width: '600px', height: '400px', border: '1px solid #ccc', borderRadius: '8px', overflow: 'hidden'}}></div>
+</div>
+<script is:inline src="/commutativity_sim.js"></script>
+
+👨‍🏫: Eleg ugyes. Annyit kell meg belatni hogy ezek a transzformaciok linearisak. De ez a definiciobol konnyen kikovetkeztetheto. Meg annyit hozzateszek, hogy ha a matrixaink nem n×n-esek akkor még nyilvánvalóbban látszik, hogy nem ugyan az lesz az eredménye a mátrixszorzásnak. Gondold ezt végig!
+
+{/* Itt említésként volt a strassen algo es a sin(A) */}
+
+👨‍🏫: Nézd meg a spongebobos szimulacion a kep kozepet. Allitgass a transzformalo matrixokon es nezd meg hogy hova kerul a kep kozepe.
+
+🙋‍♂️: Ugy tunik egy helyben marad. De ez világos is mivel ha a nullvektort kifejtjuk egy bázisban akkor minden egyuttható nulla lesz. Így ha beszorozzuk egy mátrixal akkor az eredmény is nulla lesz.
+
+👨‍🏫: Nagyon jo. Vagy ugy is ervelhetsz hogy ha A egy linearis lekepezes akkor A(0) = A(0+0) = A(0) + A(0) → 0 = A(0) Thát minden lin. Lekepezes a 0-t a 0-ba viszi. Na de mi van ha nem csak a null vektort viszi a nullaba a lekepezes. Erre bevezetunk egy fogalmat amit a kesobbiekben sokat fogunk hasznalni. Ezt a fogalmat magternek vagy kernelnek hivjuk. $ (A: U \rightarrow V, \text{lin.}) $:
+
+$$
+
+Ker(A) = \{u \in U \quad | \quad A(u) = 0 \}
+
+$$
+
+👨‍🏫: Szoval igazabol azoknak az U beli vektoroknak a halmaza amiket a lekepezes nullaba visz.
+
+🙋‍♂️: Ahaaa… és mi van akkor ha egy lin. lekepzessel akarhogy probalkozunk nem tudjuk elérni mindegyik pontjat annak a vektorternek ahova kepezunk.? Ilyen van?
+
+👨‍🏫: Oo igen. Van ilyen. Kepzelj el egy kicsit szokatlan lekepezest ami a sikrol kepez a terre.
+$$
+\begin{bmatrix}
+1 & 0 \\
+0 & 1 \\
+1 & 0
+\end{bmatrix}
+$$
+Es a lin lekepezes matrixa megadhato ebben a formaban. Ha megprobalunk minden vektort az U vektorterbol a V vektorterbe kepezni, milyen alakzatot kapunk V-ben? Nyugodtan gondolkozz rajta egy kicsit!
+
+🙋‍♂️: Szerintem egy síkot ami atmegy az origon es ha az xz sikbol nezzuk akkor egy 1 meredeksegu egyenest kapunk.
+
+👨‍🏫: Cool. Tehat valoban nem mindig “telitjuk be” a lin lekepezes “erkezo” vektorteret. Ezert bevezetunk egy uj fogalmat, a lin. lekepezes kepteret. A magter definiciojat mar ismered, tudnal erre mondani egy jo definiciot?
+
+🙋‍♂️:Szerintem valami ilyesmi lehet:
+
+$$
+
+Ran(A) = \{ v \in V \quad | \quad \exists u \in U A(u) = v \}
+
+$$
+
+👨‍🏫: Szuper ez helyes. Azt mondtuk, hogy kepTER, magTER. Most lassuk be, hogy valoban lin. alterek a Ker(A) es Ran(A) halmazok!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

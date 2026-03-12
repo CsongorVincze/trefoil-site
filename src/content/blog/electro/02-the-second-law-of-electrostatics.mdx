@@ -1,78 +1,19 @@
 ---
-title: 'Electrostatics'
-description: 'An introduction to electrostatics: charge, Coulomb force, electric field, and more.'
-pubDate: 'Feb 23, 2026'
-heroImage: '../../assets/electro_pic.webp'
+title: 'The second law of electrostatics'
+description: 'Part of Electro.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/electro_pic.webp'
 tags: ['physics']
 category: 'learn'
 lang: 'en'
+seriesId: 'electro'
+order: 2
+prev: { title: 'Electrostatics', link: '/blog/electro/01-electrostatics' }
 ---
 
-import Question from '../../components/Question.astro';
-import AxiomBox from '../../components/AxiomBox.astro';
-import UnderConstruction from '../../components/UnderConstruction.astro';
-
-<UnderConstruction lang="en" />
-
-
-Note. What I write here is mostly what I've learned from my amazing teacher, Pál Koppa at BME. If something is incorrect here its my fault, not her's.
-
-## Electrostatics
-
-This is the first chapter of our adventure in the field of electromagnetism. As the name suggests this time we'll observe stationary or slow moving charges. We will not take into account magnetic fields for now (neither quantum effects). Basically we have little points in space with some charges, and we analyze their interaction.
-
-### Experiments
-
-👨‍🏫: You probably already saw experiments where a guy rubbed an ebonit or PVC rod with cat hair. The cut's fur stood on end. And if our guy pulled the rod trough the electroscope the needle moved out from it's original position.
-Let's draw some conclusion and analyze what happened! We say that a body is neutral if it has (roughly) the same positive charges(neutrons) as negative charges (electrons). It's important to note that we can not create charges or destroy one. The only thing that we are able to do is to separate them.
-
-🙋‍♂️: But if the objects were neutral, then why did we see that the they got charged?
-
-👨‍🏫: Good question! The outer electrons of the atoms are'nt held that strong. And when two bodies come into contact one of them will has a stronger pull on electrons. So, it will gain some electrons from the other body and the other will give some. But this creates a charge imbalance in each material. One of them will have more electrons (ebonit rod) making the body negative, and the other will lose some electrons (cat's hair) making the object slightly positively charged. the electroscope can convince us that the objects indeed became charged.
-
-<Question
-  lang="en"
-  question="But why do we need to rub the bodies together?"
-  options={[
-    "The main reason is that the objects need to contact. Basically we are making the contact area greater and pushing the materials closer with rubbing.",
-    "Because the show must go on.",
-    "We generate electric current doing this and it creates new charges."
-  ]}
-  correctAnswerIndex={0}
-/>
-
-
-There are a lot of similar experiments, check them out. The main take aways are:
-
-1. There are two types of charges negative and positive.
-2. We can use the principle of superposition for charges.
-3. Charges with same sign don't like each other, different charges are attracted to each other
-4. We can NOT create or destroy charges we can only separate them.
-4. In neutral bodies there are the same amount of positive and negative charges.
-6. Most of the bodies are either conductors (usually metallic material) or insulators. While the charges in insulators arn't free to move a lot, in conductors charges can travel.
-
-### Coulomb force
-
-Conducting another experiment called the coulomb experiment we can observe that the force between electrically charged objects is proportional to the charges on the first object and also proportional to the charges on the second object. Besides that it is also inversely proportional to the distance squared. so we can come up with this proportionality:
-
-$$
-F \propto \frac{Q_1 Q_2}{r^2}
-$$
-
-We can turn this proportionality onto an equation if we put a constant before the right hand side.:
-
-$$
-F = k \frac{Q_1 Q_2}{r^2}
-$$
-
-Now we have two options. We define $k$ to be one (so it vanishes), and than we conclude the unit of charge. Or we define the unit of charge and conclude $k$. Usually we do the second option. We say that the unit of the charge will be Coulomb (C) (named after Coulomb) and we define it with the smallest charge (least in classical circumstances), the charge of the electron (or the proton). The charge of one electron is defined by $1,602\dots * 10^-19C$
-So we choose to define charge and conclude what $k$ should be. Usually (for some reason) we don't use $k$, but we use $ \frac{1}{4 \pi \epsilon_0}$. It will be more comfortable for us to calculate with this expression in some problems. So, Coulomb law is the following:
-
-$$
-F = \frac{1}{4 \pi \epsilon_0} \frac{Q_1 Q_2}{r^2}
-$$
-
-OK We're gonna skip a lot here xd. I'll write it later.
+import Question from '../../../components/Question.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
 
 ## The second law of electrostatics
 
@@ -173,4 +114,3 @@ $$
 $$
 
 👨‍🏫: As a homework you can think about what this cyclic integral means intuitively!
-

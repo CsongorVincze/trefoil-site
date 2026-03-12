@@ -1,0 +1,113 @@
+---
+title: 'Vektorrendszerek'
+description: 'Részlet a vektorterek bevezetéséből.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'linear-algebra', 'vectors']
+category: 'learn'
+lang: 'hu'
+prev: { title: 'Normak', link: '/blog/vektorterek/08-normak' }
+next: { title: 'Linearis lekepezesek', link: '/blog/vektorterek/10-linearis-lekepezesek' }
+seriesId: 'vektorterek'
+order: 9
+---
+
+import Question from '../../../components/Question.astro';
+import ProofBox from '../../../components/ProofBox.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import Exercise from '../../../components/Exercise.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Vektorrendszerek
+
+👨‍🏫: Most egy kicsit egyes vektorrendszerekkel fogunk fouglalkozni es egy ket dologgal amit neha erdemes veluk csinalni. Legyen $ E = e_1, e_2 \dots e_n $ bazis a $V$ vektorterben, es fogjunk meg egy $ x \in V $ vektort. Mivel E vektorrendszer bazis volt igy a bazis definicioja miatt:
+
+$$
+\exists \lambda_0, \lambda_1, \dots \lambda_n : \lambda_0 x + \lambda_1 e_1 + \dots + \lambda_n e_n = 0 , \exists \lambda_i \neq 0, i \in {0, 1 \dots n}
+$$
+
+Namarmost azt feltehetjuk, hogy x egyutthatoja nem nulla. Ebbol pedig az alabbi kovetkezik:
+
+$$
+x = - \frac{\lambda_1}{\lambda_0} e_1 - \frac{\lambda_2}{\lambda_0} e_2 \dots - \frac{\lambda_n}{\lambda_0} e_n
+$$
+Na de mit is jelent ez?
+
+🙋‍♂️: $ x $ -et fel tudjuk irni a bazisvektorok linearis kombinaciojakent?
+
+👨‍🏫: Pontosan. Readasul az is igaz, hogy egyertelmuen tudjuk mindezt megtenni. Tehat nem lehet olyan, hogy egy vektort ugyanazokkal a bazisokkal kulonboz egyutthatokkal tudunk felirni. Az egyutthatok mindig egzertelmuek. Ennek a bizonyitasat rad hagyom.
+{/* todo ennek leirhatom majd a megoldasat */}
+Most pedig raterunk a vektorrendszereket erinto fogalmak bevezetesere. Ezek definiciok. Nagyjabol logikusak, de meg kell tanulni oket.
+**Def.** $(v_i)_{i \in I}$ vektorrendszer ...
+
+1. *Ortogonális, ha:* 
+$$
+\forall i, j \in I \text{-re} \quad \langle v_i, v_j \rangle = 0 \quad \text{ha} \quad i \neq j \quad 
+$$
+
+2. *Normalizált, ha:* 
+$$
+\forall i \in I \text{-re} \quad \|v_i\| = 1
+$$
+
+3. *Ortonormált, ha:* 
+$$
+\forall i, j \in I \text{-re} \quad \langle v_i, v_j \rangle = \delta_{ij}
+$$
+
+4. *Teljes, ha:* 
+$$
+\forall x \in V, \forall i \in I \text{-re} \quad \quad \langle x, v_i \rangle = 0 \Rightarrow x = 0
+$$
+
+### Gram-Schmidt-ortogonalizacio
+
+👨‍🏫: Jooooo. Na most, hogy megvoltak ezek a fogalmaink nemelyekkel kezdunk is valamit. Azt tudjuk, hogy ugyanazt a vektorteret neha tobbfele bazissal is leirhatjuk. Es azt is tudjuk, hogy ezek kozott a bazisrendszerek kozott bijekcio all fenn. Szoval peldaul a sikon sem csak az altalunk megszokott, jol ismert kis bazisainkkal tudunk dolgozni. Lehet peldaul olyan bazisunk ahol a ket bazisvektor nem meroleges egymasra, vagy nem egyseg hosszuak. De persze ettol meg ok is jo bazisok... Bar azert mi sokszor jobban szeretunk a megszokott kis egyseghosszu meroleges bazisvektorkainkkal dolgozgatni. Szoval ha nem ilyen bazist talalunk akkor azt neha kenyelmes attranszformalni. Erre ad nagyszeru eszkozt a Gram-Schmidt-ortogonalizacio. Nezzuk is meg, hogy mukodik!
+
+$$
+\begin{aligned}
+& \underline{\underline{\text{G-S-O}:}} \\
+& \text{Vegyunk egy vektorrendszert } (v_1, v_2, \dots, v_n) \\
+& \text{Az első vektort egészen békén hagyjuk.} \\
+& \text{Csak levágjuk egységvektorra.} \\
+& e_1 = \frac{v_1}{\|v_1\|} \\
+& e_2 = \frac{v_2 - \langle v_2, e_1 \rangle e_1}{\| v_2 - \langle v_2, e_1 \rangle e_1 \|} \\
+& e_k = \frac{v_k - \sum_{i=1}^{k-1} \langle v_k, e_i \rangle e_i}{\left\| v_k - \sum_{i=1}^{k-1} \langle v_k, e_i \rangle e_i \right\|}
+\end{aligned}
+$$
+
+Es ezzel a folyamattal szepen vegigmegyunk az osszes vektoron a bazisban.
+
+🙋‍♂️: Ha jol ertem nem csak ortogonalizalunk hanem normaljuk is a vektorainkat.
+
+👨‍🏫: Igen, a nev nem emliti a normalast, de valoban. Igy kapunk az eredeti vektorrendszerbol egy olyat ami mar szep ortogonalis es normalt.
+
+### Vektorok kifelytese
+
+👨‍🏫: Na hasznaljuk is ki, hogy tudunk szep kis ortonormalt bazist kesziteni. Legyen $ (e_i)_{i = 1, \dots, n} $ ONB (ortonormalt bazis). Nezzuk meg, hogy az $ e_k$-hoz tartozo egyutthatot hogy tudjuk kifelyezni.
+$$
+\begin{aligned}
+\langle e_k, x \rangle &= \left\langle e_k, \sum_{i=1}^n \lambda_i e_i \right\rangle \quad \text{Mivel: } x = \sum_{i=1}^n \lambda_i e_i \\
+&= \sum_{i=1}^n \lambda_i \underbrace{\langle e_k, e_i \rangle}_{\delta_{ki}} = \lambda_k \\
+\therefore \quad x &= \sum_{i=1}^n \langle e_i, x \rangle e_i \\[2em]
+\end{aligned}
+$$
+Tehat $x$-et igy is kifelyezhetjuk. Ha mar ezt tudjuk nezzunk meg ezzel egy erdekes altalanositast. Nem mast altalanositunk itt mint a pithagorasz tetelt. Kicsit matekozzunk es aztan ertelmezzuk, hogy mit kapunk!
+
+
+$$
+\begin{aligned}
+\|x\|^2 &= \left\langle \sum_{i=1}^n \langle e_i, x \rangle e_i, \; \sum_{j=1}^n \langle e_j, x \rangle e_j \right\rangle \\
+&= \sum_{i=1}^n \overline{\langle e_i, x \rangle} \sum_{j=1}^n \langle e_j, x \rangle \langle e_i, e_j \rangle \\
+&= \sum_{i,j=1}^n \overline{\langle e_i, x \rangle} \langle e_j, x \rangle \underbrace{\langle e_i, e_j \rangle}_{\delta_{ij}} \\
+&= \sum_{i=1}^n \left| \langle e_i, x \rangle \right|^2
+\end{aligned}
+$$
+
+👨‍🏫: Erted, hogy ez miert a pitagorasz tetel altalanositasa?
+
+🙋‍♂️:Szerintem igen. Vegyuk a sikot a szokasos bazissal es skalarszorzassal. Ha ott elkepzelunk egy nyilacskat akkor annak a hossznegyzetet a kovetkezo keppen tudjuk kiszamolni.: Vegyuk a nyilacskanak az egyik bazisvektorra vett vetuletet, emeljuk negyzetre, jegyezzuk meg ezt a szamot. Most ugyanigy nezzuk meg a masik bazisvektorra vett vetuletet, ezt is emeljuk negyzetre es ezt a szamot is jegyezzuk meg. Most pedig ezt a ket szamot adjuk ossze. Ez igazabol a pitagorasz tetel. Es ugyan ezt csinaljuk most is csak tobb dimenzioban.
+
+👨‍🏫: Nagyszeruuuu.
+
+

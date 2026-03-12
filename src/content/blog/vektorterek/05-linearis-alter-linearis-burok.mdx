@@ -1,0 +1,61 @@
+---
+title: 'Linearis alter, linearis burok'
+description: 'Részlet a vektorterek bevezetéséből.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'linear-algebra', 'vectors']
+category: 'learn'
+lang: 'hu'
+prev: { title: 'Bázis, dimenzio', link: '/blog/vektorterek/04-bazis-dimenzio' }
+next: { title: 'Skalárszorzatos vektorterek', link: '/blog/vektorterek/06-skalarszorzatos-vektorterek' }
+seriesId: 'vektorterek'
+order: 5
+---
+
+import Question from '../../../components/Question.astro';
+import ProofBox from '../../../components/ProofBox.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import Exercise from '../../../components/Exercise.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Linearis alter, linearis burok
+
+👨‍🏫: Vegyuk az ($\mathbb{R}^3$) teret. Errol mar belattuk, hogy vektorteret alkot. Vegyuk ehhez a szokasos, standard $ x, y, z $ koordinatazast. Most vegyunk azonak a vektoroknak a halmazat amelyek $ [a, b, 0] $ alakba irhatoak. Mi tortenik ha ket ilyen vektort osszeadunk?
+
+🙋‍♂️: Hat tovabbra is az $ xy $ sikban maradnak.
+
+👨‍🏫: Pontosan. Es ha egy ilyen vektort megszorzunk egy skalarral?
+
+🙋‍♂️: Szinten az $ xy $ sikban marad a modositott vektor.
+
+👨‍🏫: Ezek a vektorok mar eredetileg is egy vektorter elemei voltak. Igy mit mondhatunk el ezeknek az $ [a, b, 0] $ alaku vektorok halmazarol?
+
+🙋‍♂️: Hat igazak rajuk a vektorter axiomai. Es valahogy igy nem tudnak "kimenni" az $ xy $ sikrol. Szoval azt gondolom hogy ok is egyfajta kisebb vektorteret alkotnak.
+
+👨‍🏫: Nagyon jooo. Ezt linearis alternek nevezzuk. $ L \subseteq V $ linearis altere a $V$ vektorterunknek, ha:
+
+$$
+\begin{aligned}
+1. \quad & a, b \in L \implies a + b \in L \\
+2. \quad & a \in L, \lambda \in K \implies \lambda a \in L
+\end{aligned}
+$$
+
+{/* todo ide kep az egyenesrol es arrol h subset */}
+
+🙋‍♂️: Szoval a null vektor mindig bennevan a linaris alberben, es az egesz vektorter mindig egy linaris alter is egyben, ha jol ertem
+
+👨‍🏫: Igen, igen, nagyon jó észrevételek. Haladjunk tovább a lineáris burok fogalmára. Ha van egy $V$ vektorterünk és abban egy $A = \{v_1, v_2, \dots, v_n\}$ vektorrendszerünk, akkor $A$ lineáris burka ($\langle A \rangle$):
+
+$$
+\langle A \rangle = \left\{ \sum_{i=1}^{n} \lambda_i v_i : \lambda_i \in \mathbb{K}, n \in \mathbb{N} \right\}
+$$
+
+🙋‍♂️: Ez a burok linaris burok dolog igazabol linearis alteret konstrual, nem?
+
+👨‍🏫: Igen. Ha osszeadod ket linearis kombinaciojat a vektorrendeszernek akkor az meg mindig a vektrorrendszered linearis kombinacioja lesz. Ugyanez igaz a szorzasra is. Tehat valoban, a linaris burok elkeszitese egy olyan "gepezet" ami a vektorrendszerunkre illeszt egy linaris alteret. De meg az is igaz hogy a leheto legkisebb linaris alteret illeszti az eredeti vektorainkra. Ezt ertheted ugy, hogy ha van a 3D-s terben ket vektorod akkor azoknak a linaris burka egy sikot fog meghatarozni nem pedig az egesz 3D-s teret.
+
+
+
+
+

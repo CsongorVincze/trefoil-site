@@ -1,0 +1,88 @@
+---
+title: 'Asszociatív algebra'
+description: 'Részlet a vektorterek bevezetéséből.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'linear-algebra', 'vectors']
+category: 'learn'
+lang: 'hu'
+prev: { title: 'Muveletek matrixokkal', link: '/blog/vektorterek/11-muveletek-matrixokkal' }
+next: { title: 'Jacobson-lemma:', link: '/blog/vektorterek/13-jacobson-lemma' }
+seriesId: 'vektorterek'
+order: 12
+---
+
+import Question from '../../../components/Question.astro';
+import ProofBox from '../../../components/ProofBox.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import Exercise from '../../../components/Exercise.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Asszociatív algebra
+
+👨‍🏫: Emlékszel még arra amikor definiáltuk a skalárszorzást egy vektortéren? Eredetileg a vektortér elemeit csak összeadni tudtuk, meg skalárral szorozni (jo persze volt inverz meg ilyesmik). Zavart, hogy nem tudtunk összeszorozni két vektort. Így bevezettünk egy olyan függvényt ami megeszik két vektort és kiköp egy skalárt. Ez már egész jó! Bár azért még mindig zavar, hogy nem tudunk két vektort összeszorozni úgy, hogy egy harmadik vektort kapjunk.
+
+🙋‍♂️: De várjunk az $n \times n $-es mátrixok vektorteret alkotnak, és mátrixokat tudunk összeszorozni. Akkor ha jól értem akkor vannak vektorterek ahol már autómatikusan működik a vektorok szorzása.
+
+👨‍🏫: Pontosan. Nagyon jó meglátás! Ha megfigyeljük az nxn-es mátrixok szorzására vonatkozó jellemzőket a következőket kapjuk: A, B, C mátrixok $ \lambda \mu $ skalárok
+1. $ A(BC) = (AB)C $
+2. $ A(B + C) = AB + AC $
+3. $ (A + B)C = AC + BC $
+4. $ (\lambda A) (\mu B) = (\lambda \mu) (AB) $
+
+Namármost nem csak a mátrixokra lehetnek igazak ezek a szabályok. Ha egy vektortér elemeire igazak a fönti szabályok akkor azt mondhatjuk, hogy a vektortér elemei egy asszociatív algebrát alkotnak. Általában kis betűvel írjuk a vektorokat, így a szabályok egy asszociatív algebra létezéséhez:
+
+1. $ a(bc) = (ab)c $
+2. $ a(b + c) = ab + ac $
+3. $ (a + b)c = ac + bc $
+4. $ (\lambda a) (\mu b) = (\lambda \mu) (ab) $
+(ha $\forall a, b, c \in V$ és $ \forall \lambda, \mu \in \mathbb{K}$ skalárra igazak a szabályok)
+
+<Question
+  question="Az alábbi három közül mi nem alkot asszociatív algebrát?"
+  options={[
+    "Polinomok a standard polinom szorzással",
+    "R^3 ban lévő vektorok vektoriális szorzással",
+    "f:R->R folytonos függvények, a szorzás a függvényértékek normál szorzása"
+  ]}
+  correctAnswerIndex={1}
+/>
+
+👨‍🏫: Ha visszatekintünk a mátrixok szorzására egyes $n \times n $ mátrixoknak volt egy elég fontos tulajdonsága. Emlékszel mi volt ez?
+
+🙋‍♂️:Hmmm... Ha egy mátrixnak nem zérus volt a determinánsa akkor invertálható volt, ha jól emlékszem.
+
+👨‍🏫:Nagyon jóó. Ha visszaemlékezünk $ A^{-1} $ az  $A$ mátrix inverze volt ha $ A^{-1}A = AA^{-1} = I $ Ahol $ I $ az $n \times n $-es
+identitásmátrix volt.
+
+Viszont ahhoz, hogy invertáljunk kell az algebránkba egységelem. Azokat az asszociatív algebrákat amiben ilyen van azt egységelemes asszociatív algebrának hívjuk (nagyon meglepő).
+Általában az egységelemet $ e $-vel jelöljük. Az $A$ egységelemes algebrára teljesülnie kell, hogy: $ ae = ea = a : \forall a \in A $
+Na mostmár definiálhatjuk az inverzet! $ a \in A $ invertálható, ha: $ \exists a^{-1} \in A : a^{-1}a = aa^{-1} = e $
+
+Vigyázat az, hogy létezik egységelem az algebránkban nem jelenti azt, hogy feltétlen minden eleme az algebránknak invertálható! Nézd például a következő mátrixot:
+$B =
+\begin{bmatrix}
+2 & 2\\
+2 & 2
+\end{bmatrix} $
+
+### Asszociatív algebra spektruma
+
+Egy egységelemes asszociatív algebrának létezik spektruma is. Az algebra egy $ a $ elemének a spktruma azoknak a skalároknak a halmaza amikre nem létezik inverze $ a - \lambda e $-nak:
+
+$$
+sp(a) = \{ \lambda \in \mathbb{K} : \nexists (a - \lambda e)^{-1} \}
+$$
+
+Valahol már láttunk hasonlót. Ismerős ez valahonnét?
+
+🙋‍♂️:Sajnos nem.
+
+👨‍🏫:Ha visszaemlékszünk a sajátérték számításra, ott valami ilyesmi képletünk volt: $ \lambda $ sajátértéke $ A $-nak, ha $ det(A - \lambda I) = 0 $
+
+🙋‍♂️:Aaa, mostmár értem. Ha nem létezik $ (a - \lambda e) $-nek inverze az a mátrixok nyelvén azzal egyenértékű, hogy $ det(A - \lambda I) = 0 $ Mivel ha egy mátrixnak a determinánsa $ 0 $ az azt jelenti, hogy a mátrix nem invertálható (és vica verza).
+
+👨‍🏫:Igen, a mátrixoknál valóban a spektrum egyenértékű a sajátértékek halmazával (végtelen dimenzióban már nem csak a sajátértékekből áll a spektrum, de ez most nem fontos).
+
+
+

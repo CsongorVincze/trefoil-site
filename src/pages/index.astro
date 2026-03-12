@@ -3,6 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import BoidBackground from '../components/BoidBackground.astro';
+import GraphTOC from '../components/GraphTOC.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
@@ -31,6 +32,12 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 			<p class="notice">
 				<strong>Pardon our dust:</strong> Trefoil is a work in progress. We are actively writing, editing, and polishing our materials. Thank you for growing with us — stay tuned for frequent updates!
 			</p>
+			
+			<div style="margin-top: 5rem; animation: fadeSlideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 1.1s;">
+				<h2 style="color: var(--honeydew); margin-bottom: 0.5rem; text-align: center;">Explore Topics</h2>
+				<p style="text-align: center; color: var(--frosted-blue); margin-bottom: 2rem;">Navigate through all available chapters across subjects.</p>
+				<GraphTOC />
+			</div>
 		</main>
 		{/* Footer removed */}
 		<style>

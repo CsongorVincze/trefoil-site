@@ -1,0 +1,41 @@
+---
+title: 'The Physics Behind It'
+description: 'Part of Oscillations.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/blog-placeholder-3.jpg'
+tags: ['physics', 'math', 'simulation']
+category: 'learn'
+lang: 'hu'
+seriesId: 'oscillations'
+order: 3
+prev: { title: 'Harmónikus rezgőmozgás (gerjesztetlen, csillapítatlan)', link: '/blog/oscillations/02-harmonikus-rezgomozgas-gerjesztetlen-csillapitatlan' }
+---
+
+import Question from '../../../components/Question.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## The Physics Behind It
+
+The motion of a simple pendulum is governed by the following differential equation:
+
+$$ \theta'' = -\frac{g}{L} \sin(\theta) - \mu \theta' $$
+
+Where:
+- $\theta$ is the angle of the pendulum from the vertical.
+- $\theta'$ is the angular velocity.
+- $\theta''$ is the angular acceleration.
+- $g$ is the acceleration due to gravity.
+- $L$ is the length of the pendulum.
+- $\mu$ is the damping coefficient (representing air resistance or friction).
+
+In our simulation, we approximate this using Euler integration:
+
+1. Calculate angular acceleration based on the current angle and velocity.
+2. Update angular velocity by adding the acceleration.
+3. Update the angle by adding the velocity. */ }
+
+
+<div id="simulation-container" style="display: flex; flex-direction: column; align-items: center; margin: 2rem 0;"></div>
+
+
+<script is:inline src="/pendulum_sim.js"></script>

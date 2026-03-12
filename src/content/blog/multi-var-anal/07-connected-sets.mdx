@@ -1,0 +1,43 @@
+---
+title: 'Connected sets'
+description: 'Part of Multi_var_anal.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'analysis', 'topology']
+category: 'learn'
+lang: 'en'
+seriesId: 'multi-var-anal'
+order: 7
+prev: { title: 'Properties of open and closed sets', link: '/blog/multi-var-anal/06-properties-of-open-and-closed-sets' }
+next: { title: 'Limits and continuity', link: '/blog/multi-var-anal/08-limits-and-continuity' }
+---
+
+import Question from '../../../components/Question.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Connected sets
+
+🙋‍♂️: Do we care about if a set is connected or not? Do we have a definition for that?
+
+👨‍🏫: Yesss that's an important idea too.
+
+<AxiomBox lang="en" title="Definition: Connected Set">
+
+$A \subseteq \mathbb{R}^{p}$ is a **connected set**, if there do not exist open sets $C, B \subseteq \mathbb{R}^{p}$ such that:
+$$
+C \cap B = \emptyset, \quad A \subseteq C \cup B, \quad A \cap C \neq \emptyset, \quad A \cap B \neq \emptyset
+$$
+
+In other words: $A$ cannot be split into two non-empty, disjoint open parts.
+
+</AxiomBox>
+
+<AxiomBox lang="en" title="Definition: Isolated Point">
+
+$a \in A$ (where $A \subseteq \mathbb{R}^{p}$) is an **isolated point** of $A$ if:
+$$
+\exists\, \varepsilon > 0 : B_{\varepsilon}(a) \cap A = \{a\}
+$$
+
+</AxiomBox>

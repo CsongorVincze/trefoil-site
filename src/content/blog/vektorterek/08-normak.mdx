@@ -1,0 +1,144 @@
+---
+title: 'Normak'
+description: 'Részlet a vektorterek bevezetéséből.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'linear-algebra', 'vectors']
+category: 'learn'
+lang: 'hu'
+prev: { title: 'Caucy-Schwarz-Bunyakowskij egyenlotlenseg es vektorok altal bezart szog', link: '/blog/vektorterek/07-caucy-schwarz-bunyakowskij-egyenlotlenseg-es-vektorok-altal-bezart-szog' }
+next: { title: 'Vektorrendszerek', link: '/blog/vektorterek/09-vektorrendszerek' }
+seriesId: 'vektorterek'
+order: 8
+---
+
+import Question from '../../../components/Question.astro';
+import ProofBox from '../../../components/ProofBox.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import Exercise from '../../../components/Exercise.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Normak
+
+👨‍🏫: Ahogy a skalarszorzast is altalanositanunk kellett ha kicsit elborultabb vektorterekkel dolgoztunk, igy a vektorok hosszat sem olyan konnyu mar lemerjuk. Hasonloan itt is be fogunk vezetni egyes axiomakat. Es inkabb a norma szot fogjuk hasznalni a hossz helyett. Ha visszagondolsz a skalarszorzat axiomaira, milyen felteteleket kene szabjunk, hogy altalanosithassuk a vektor hosszat?
+
+🙋‍♂️: Szerintem itt is hasznos lenne ha nem engednenk meg hogy egy vektor negativ hosszu legyen. Meg hogyha a vektort megszorozzuk 5-tel akkor a normaja is lehetne 5-szor akkora.
+
+👨‍🏫: Jo otlet! Meg egy kicsit kiegeszitem es mar meg is van a norma definicioja.
+$$
+\begin{aligned}
+\|\cdot\| : V \to \mathbb{R} \\
+1. \quad & \|x\| \ge 0 \\
+2. \quad & \|x\| = 0 \iff x = 0 \\
+3. \quad & \|\lambda x\| = |\lambda| \|x\| \\
+4. \quad & \|x + y\| \le \|x\| + \|y\|
+\end{aligned}
+$$
+
+Szoval a norma egy olyan fuggveny ami a vektorterbol kepez a valos szamokba. Es valoban, a norma mindig nagyobb mint 0 kiveve ha magat a 0 vektort normaljuk. Abban is igazad volt, hogy ki kell tudjuk hozni a skalar szorzot. Itt annyi pontositast tettem hogy a skalar abszoluterteket kell tudjuk kiemelni. Ez azert kell mert lehet, hogy a  komplex kest folott van definialva a vektorterunk. Amit viszont elfelejtettel emliteni az a haromszogegyenlotlenseg. Ha van kedved leellenorizheted, hogy a sikon hasznalt standard norma kielegiti a normara adott felteteleinket. ( $ \|x\| = \sqrt{x_1^{2} + x_2^{2}} $ )
+
+🙋‍♂️: Hmmm... A normaban es a skalarszorzasban latszolag eleg sok kozos tulajdonsag van. Nem tudjuk valahogy oket osszekotni?
+
+👨‍🏫: Jo meglatas. Pont ezzel fogjuk folytatni. Ha van egy skalarszorzatos vektorterunk akkor abban a skalarszorzas normat indukal.:
+$$
+\|x\| = \sqrt{\langle x, x \rangle}
+$$
+
+Es itt mar $ \|x\| $-el a normat jeloljuk. Nezzuk meg a bizonyitast!
+
+Az hogy nem negativ kapasbol kovetkezik a skalarszorzas axiomaibol (1. 2.) pont. A $ | \lambda |$ -val valo kiemeles is egesz gyorsan belathato. A haromszogegyenlotlenseg viszont egy kicsit trukkosebb.
+
+<ProofBox title="Bizonyítás: Háromszög-egyenlőtlenség">
+$$
+\begin{aligned}
+& \text{Tegyük fel, hogy igaz a háromszög-egyenlőtlenség:} \\
+& \|x+y\| \le \|x\| + \|y\| \\
+\\
+& \text{A skalárszorzás tulajdonságai miatt négyzetreemelhetünk:} \\
+& \langle x+y, x+y \rangle \le \\
+& \le \langle x,x \rangle + \langle y,y \rangle + 2\sqrt{\langle x,x \rangle}\sqrt{\langle y,y \rangle} \\
+\\
+& \text{A bal oldalt kibontva:} \\
+& \langle x,x \rangle + \langle x,y \rangle + \langle y,x \rangle + \langle y,y \rangle \le \\
+& \le \langle x,x \rangle + \langle y,y \rangle + 2\sqrt{\langle x,x \rangle}\sqrt{\langle y,y \rangle} \\
+\\
+& \text{Egyszerűsítve } \langle x,x \rangle \text{ és } \langle y,y \rangle \text{ tagokkal:} \\
+& \langle x,y \rangle + \langle y,x \rangle \le 2\sqrt{\langle x,x \rangle}\sqrt{\langle y,y \rangle} \\
+\\
+& \text{Kihasználva a skalárszorzás tulajdonságait } (\langle y,x \rangle = \overline{\langle x,y \rangle}) \\
+& \text{és a komplex számokét } (z + \bar{z} = 2\text{Re}(z)): \\
+& 2\text{Re}(\langle x,y \rangle) \le 2\sqrt{\langle x,x \rangle}\sqrt{\langle y,y \rangle} \\
+\\
+& \text{Mivel } \text{Re}(z) \le |z|, \text{ ezért:} \\
+& |\langle x,y \rangle| \le \sqrt{\langle x,x \rangle}\sqrt{\langle y,y \rangle} \\
+\\
+& \text{Ez viszont a C.S.B. egyenlőtlenség miatt igaz,} \\
+& \text{így az állítást beláttuk.}
+\end{aligned}
+$$
+</ProofBox>
+
+
+
+
+
+
+### P-normak
+
+👨‍🏫: A $ \mathbb{K}^n $ vektortereken van a normaknak egy kulonleges csaladja. Ezeket p-normaknak hivjuk (eleg beszedes elnevezes).:
+
+$$
+\|x\|_{p} = \left(\sum_{i=1}^{n} |x_{i}|^{p} \right)^{\frac{1}{p}}
+$$
+
+Fontos megemliteni, hogy az allitas csak $ p \geq 1 $ -re ad valid normat. Nezd meg hogy mire egyszerusodik ha $ p=2, n=2$ visszakapjuk a rendes sikon a tavolsag meresehez szokasosan hasznalt formulat. Mint ahogy sok mas dolog is amit idaig csinaltunk egyfajta kiterjesztese a megszokott fogalmainkrol. Az alabbi animacioban megnezheted, hogy hogy nez ki egy egysegkor ha a sikon a tavolsagot nem $ p = 2$-es norma szerint mernenk.
+
+<div id="p-norm-container" style={{display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '2rem 0'}}></div>
+<script is:inline src="/p_norm_sim.js"></script>
+
+🙋‍♂️: Na de hogyan bizonyitjuk, hogy ezek a p-normak valoban kielegitik a normak axiomait?
+
+👨‍🏫: Az hogy a p-norma nem mehet nulla ala azt maga a p-norma definicioja biztositja. A skalar kiemelese is konnyeden belathato. Megint a haromszogegyenlotlenseg a nehezseg. Ehhez felhasznaljuk az un. Minkowski egyenlotlenseget ami azt mondja ki, hogy:
+
+$$
+\left(\sum_{i=1}^{n} |x_{i} + y_{i}|^{p} \right)^{\frac{1}{p}} \leq \left(\sum_{i=1}^{n} |x_{i}|^{p} \right)^{\frac{1}{p}} + \left(\sum_{i=1}^{n} |y_{i}|^{p} \right)^{\frac{1}{p}}
+$$
+
+amennyiben $ p \geq 1 $. Ebbol pedig kovetkezik, hogy a p-normak valodi normak.
+
+🙋‍♂️: Mi tortenik ha p-vel tartunk a vegtelenbe?
+
+👨‍🏫: Igen jo kerdes. Ha a $p$ tart vegtelen esetet vizsgaljuk akkor belathato hogy a kovetkezo formulat kapjuk:
+
+$$
+\|x\|_{\infty} = \max \{ |x_1|, \dots, |x_n| \}
+$$
+
+### Vektorok altal bezart szog
+
+👨‍🏫: Ha emlekszel meg a C.S.B. egyenlotlensegnel belattuk, hogy $ |\langle x, y \rangle|^{2} \leq \|x\|^{2} \|y\|^{2} $ Rendezzuk at egy kicsit a dolgokat!
+
+$$
+\begin{aligned}
+& \frac{ |\langle x, y \rangle|^{2} }{\|x\|^{2} \|y\|^{2}} \leq 1 \\
+\\
+& -1 \leq \frac{ |\langle x, y \rangle| }{\|x\| \|y\|} \leq 1
+\end{aligned}
+$$
+
+👨‍🏫: Emlekszel meg, hogy a kozepsuliban hogy definialtak a skalarszorzatot?
+
+🙋‍♂️: Igen. Ket vektor skalarszorzata a vektorok hosszanak szorzata, es ezt meg megszorozzuk a ket vektor altal bezart szok koszinuszaval. Szoval valami ilyesmi kepletet kaptunk:
+
+$$
+x \cdot y = |x||y|cos(\alpha)
+$$
+
+Varjunk csak ez tok hasonlo a fenti formulahoz. ha kicsit rendezgetunk.:
+
+$$
+\frac{x \cdot y}{|x||y|} = cos(\alpha)
+$$
+
+👨‍🏫: Oooo igen. Ha egy altalanos skalarszorzatos vektorteret nezunk akkor abban igy tudjuk definialni ket vektor altal bezart szoget. Egy fontos megjegyzest azert tennek. A kozepiskolabol ismert skalarszorzasos keplet definialasahoz hasznaltatok a ket vektor altal bezart szoget. most viszont pont forditva csinaljuk. egy skalarszorzatos vektorterben a szoget definialjuk a skalarszorzas felhasznalasaval.
+

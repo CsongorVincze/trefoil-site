@@ -1,0 +1,169 @@
+---
+title: 'Linearis lekepezesek'
+description: 'Részlet a vektorterek bevezetéséből.'
+pubDate: 'Jan 02, 2026'
+heroImage: '../../../assets/sponge.png'
+tags: ['math', 'linear-algebra', 'vectors']
+category: 'learn'
+lang: 'hu'
+prev: { title: 'Vektorrendszerek', link: '/blog/vektorterek/09-vektorrendszerek' }
+next: { title: 'Muveletek matrixokkal', link: '/blog/vektorterek/11-muveletek-matrixokkal' }
+seriesId: 'vektorterek'
+order: 10
+---
+
+import Question from '../../../components/Question.astro';
+import ProofBox from '../../../components/ProofBox.astro';
+import AxiomBox from '../../../components/AxiomBox.astro';
+import Exercise from '../../../components/Exercise.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+## Linearis lekepezesek
+
+👨‍🏫: Elerkeztunk a tananyag egyik legfontosabb temajahoz. A linearis lekepezesekhez. $ U, V $ vektorterek. $ A: U \rightarrow V $ lekepezes linearis ha megfelel a kovetkezo ket kriteriumnak.:
+
+$$
+1. \forall x, y \in U \quad A(x+y) = A(x) + A(y) \\
+2. \forall x \in U, \quad \forall \lambda \in \mathbb{K} \quad A(\lambda x) = \lambda A(x)
+$$
+
+Jo igazabol meg az is kell, hogy $ Dom(A) = U $. Tehat ha egy transzformalo masinanak kepzeljuk el akkor ez pluszban annyit tesz, hogy "legyszi minden vektort hadd tudjak benyomni a masinaba". Tudsz esetleg olyan lekepezest ami megfelelhet ezeknek a szabalyoknak?
+
+🙋‍♂️: Talan az origo koruli forgatas $ \alpha $ szoggel.
+
+👨‍🏫: Igen ez megfelelo. Peldaul a plinomok teren mondjuk jo meg a derivalas is vagy az indegralas korlatos zart intervallumon. Emellett ha mondjuk a szoki 3D-s terbol levetitesz az $xy$ sikra az is egy linearis lekepezes. De akar meg az is linearis lekepezes hogy nem csinalok semmit. Tehat $ A: V \rightarrow V, A(x) = x $ Ezt amugy identitasnak hivjuk.
+
+🙋‍♂️: Meno.
+
+👨‍🏫: Na jo. Folytassuk. Mi lenne ha megneznenk a linearis lekepezesek halmazat. Ezt valahogy formalisan igy irhatnank le.: $ L(U, V) = \{A: U \rightarrow V : A \quad \text{linearis} \} $ Definialjuk ket $ A, B \in L(U, V) $ linearis lekepezes osszeadasat es sakalrral valo szorzasaat $ \lambda \in \mathbb{K} $ kovetkezo modon. $ (u \in U) $:
+$$
+1. (A + B)(u) = A(u) + B(u) \\
+2. (\lambda A)(u) = \lambda A(u)
+$$
+
+
+Most, hogy mar tudhunk ket linearis lekepezest osszeadni, es linearis lekepezest skalarral szorozni, belathatjuk, hogy $ L(U, V) $ vektorteret alkot. Mi most csak csak az osszeadas es a skalarral valo szorzas zartsagat fogjuk belatni. E vektorter tobbi axiomaja abbol kovetkezik, hogy $V$ maga is egy vekorter es igy a benne lako vekorokra igazak a vektorter axiomai (itt kihasznaljuk, hogy $ A(x) \in V $). Na gyerunk!
+
+<ProofBox title="L(U, V) vektorteret alkot">
+$$
+
+\begin{aligned}
+(A+B)(\lambda x + y) &= A(\lambda x + y) + B(\lambda x + y) \\
+&= \lambda A(x) + A(y) + \lambda B(x) + B(y) \\
+&= \lambda \big[ A(x) + B(x) \big] + A(y) + B(y) \\
+&= \lambda (A+B)(x) + (A+B)(y) \\[3em]
+(\eta \cdot A)(\lambda x + y) &= \eta \big( A(\lambda x + y) \big) \\
+&= \eta \cdot \lambda A(x) + \eta \cdot A(y) \\
+&= \lambda \cdot (\eta A)(x) + (\eta A)(y)
+\\
+\text{najo lassuk be a tobbit is: }\\
+\\
+& \text{1. Kommutativitás} \\
+(A+B)(x) &= A(x) + B(x) \\
+B(x) + A(x) &= (B+A)(x) \\[1em]
+& \text{2. Asszociativitás} \\
+(A+(B+C))(x) &= A(x) + (B+C)(x) = A(x) + (B(x) + C(x)) \\
+(A+B)(x) + C(x) &= ((A+B)+C)(x) \\[1em]
+& \text{3. } 0 \text{ elem} \quad O(x) = 0_V \\
+(A+O)(x) &= A(x) + O(x) \\
+&= A(x) + 0_V = A(x) \\[1em]
+& \text{4. Inverz} \\
+\text{legyen } (-A)(x) &= -(A(x)) \\
+(A+(-A))(x) &= A(x) + (-A)(x) \\
+A(x) - A(x) &= 0 \\[1em]
+& \text{5. } (1 \cdot A)(x) = 1 \cdot A(x) = A(x) \\[1em]
+& \text{6. } (\lambda(A+B))(x) = \\
+\lambda \cdot (A+B)(x) &= \lambda A(x) + \lambda B(x) \\
+&= (\lambda A + \lambda B)(x) \\[1em]
+& \text{7. } ((\lambda + \mu)A)(x) = \\
+(\lambda + \mu) \cdot A(x) &= \lambda A(x) + \mu A(x) \\
+(\lambda A)(x) + (\mu A)(x) &= (\lambda A + \mu A)(x) \\[1em]
+& \text{8. } ((\lambda \mu)A)(x) = (\lambda \mu) A(x) \\
+&= \lambda (\mu \cdot A(x)) = \lambda (\mu A)(x)
+\end{aligned}
+
+$$
+</ProofBox>
+
+🙋‍♂️: Hmm... Hat ez mar megint eleg absztrakt. Ez a linearis lekepezes valmi fuggvany szeruseg ami megeszik egy $ U $-ban lako vektort es kikop egy $ V $ -ben lako vektort, es annyit tudunk, hogy igaz ra 2 szabaly, hogy linearis legyen?
+
+👨‍🏫: Kb. igen.
+
+🙋‍♂️: Es ezzel hogy szamolunk? A rendes fuggvenyeknel meg volt legalbb adva valami fomula amibol ki tudtuk kovetkeztetni, hogy ha egy tetszoleges bemenetet etetunk meg a fuggvennyel akkor mit fog kikopni. Itt most nincs ilyen?
+
+👨‍🏫: Szerencsenk van. Lehet ilyen formula szeruseget konstrualni a linearis lekepezesekbol. (Most kivetelesen az absztraktabb fogalombol csinalunk foldhozragadtabbat.) Ha emlekszel az $n$ dimenzios $U$ vektorterben, ahol $ (e_i)_{i \in \{1, \dots n\}}$ bazis egy $x \in U$ vektort fel tudtunk irni a kovetkezo keppen.:
+$$
+x = \alpha_1 e_1 + \alpha_2 e_2 + \dots + \alpha_n e_n
+$$
+Na akkor most hattassuk a linearis lekepezest $x$-en.:
+
+$$
+A(x) = (\alpha_1 e_1 + \alpha_2 e_2 + \dots + \alpha_n e_n) \\
+\\
+\quad \\
+A(x) = \alpha_1 A (e_1) + \alpha_2 A (e_2) + \dots + \alpha_n A (e_n) \\
+
+$$
+Tehat ahhoz, hogy megtudjuk, hogy a linearis lekepezes mit csinal $x$-el, eleg tudjuk, hogy mit csinal a bazisvektorokkal, mivel az $\alpha_i$ egyutthatok nem valtoznak a trafo soran. Gyors kerdes. Melyik vektorterben van Az $A(e_i)$ vektor, ha $ A \in L(U, V)$?
+
+<Question
+  question="Melyik vektorterben van Az A(e_i) vektor?"
+  options={[
+    "U-ban",
+    "V-ben",
+    "ez nem egy vektor"
+  ]}
+  correctAnswerIndex={1}
+/>
+
+👨‍🏫: Azt mondtuk, hogy az $U$ vektorter $n$ dimenzios. Legyen $V$ vektorter $m$ dimenzios. Most, hogy mar tudjuk, hogy igazabol $A(e_i)$ egy $V$ beli vektor, mit mondhatunk el $A(e_i)$-rol?
+
+🙋‍♂️: Hat akkor $A(e_i)$-t is fel lehet bontani $V$ beli bazisok linearkombinaciojara. Ha $V$-ben $ (f_j)_{j \in \{1, \dots m\}}$ bazis akkor:
+
+$$
+A(e_i) = \gamma_{1,i} f_1 + \gamma_{2,i} f_2 + \dots +\gamma_{m,i} f_m 
+$$
+
+👨‍🏫: Kiraly. Most lazan fogalmazva fogok csinalni egy tablazatot. Fogom minden $i$-re az altalad felirt kepletet $A(e_i)$-nek. Es a $\gamma$-s egyutthatokat berendezem egymas ala egy oszlopba. Most nem torodok az osszeadassal, es azzal sem hogy ott vannak az $f_j$ vektorok. Szimplan csinalok a $\gamma$ egyutthatokbol egy oszlopvektort, es ezt megcsinalom minden $i$-re, aztan az oszlopvektoraimat egymas melle teszem. Igy valami ilyesmit kapok.:
+
+$$
+\begin{aligned}
+[A] &= \left[ \begin{array}{cccc}
+\mid & \mid & & \mid \\
+A(e_1) & A(e_2) & \dots & A(e_n) \\
+\mid & \mid & & \mid
+\end{array} \right] \\[2em]
+\\
+[A] &= \begin{bmatrix}
+\gamma_{1,1} & \gamma_{1,2} & \dots & \gamma_{1,n} \\
+\gamma_{2,1} & \gamma_{2,2} & \dots & \gamma_{2,n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\gamma_{m,1} & \gamma_{m,2} & \dots & \gamma_{m,n}
+\end{bmatrix}
+\end{aligned}
+$$
+
+A $\gamma$-k helyett $A_{j,i}$ betuket fogok hasznalni (Vigyazat ha indexelve van akkor az a egy skalar, index enlkul pedig magat a linearis lekepzest ertem).
+
+$$
+\begin{aligned}
+[A] &= \begin{bmatrix}
+A_{1,1} & A_{1,2} & \dots & A_{1,n} \\
+A_{2,1} & A_{2,2} & \dots & A_{2,n} \\
+\vdots & \vdots & \ddots & \vdots \\
+A_{m,1} & A_{m,2} & \dots & A_{m,n}
+\end{bmatrix}
+\end{aligned}
+$$
+
+Igy megalkottuk Az $A$ linearis lekepezes matrixat. A $[\space]$ jeloli, hogy ez mar egy matrix.
+
+🙋‍♂️: Szoval most onkenyesen csinaltunk egy tablazatot abbol, hogy az $U$-ban levo bazisokkal mit csinal a linearis lekpezes. Miert jo ez nekunk, es miert pont igy rendeztuk el a tablazatunkat.
+
+👨‍🏫: Igen ez igy elsore talan nem egyertelmu. A rovid valasz az, hogy ha majd vlamilyen manipulaciokat vegzunk az $A$ linearis lekepezessel (pl.: meg akarjuk nezni hogy mi tortenik ha ket lin. lekepezest hattatunk kompoziciokent) akkor ez a megfeleltetes lesz kenyelmes, igy fognak szepen kijonni a dolgok. Azt is szoktak mondani, hogy a 
+
+{/* todo itt ird le az izomorfizmust a lin lekepezes es a matrixok kozott: https://www.youtube.com/watch?v=jtXEMAXvLr4  + az ilyen kanonikus dolgok is kellenek.*/}
+
+👨‍🏫: Meg annyit erdemes megemliteni, hogy igazabol amit csinaltunk az annyi volt, hogy felhasznaltuk, hogy $U$ izomorf $\mathbb{K}^n$ -el es $V$ izomorf $\mathbb{K}^m$ -el. Tehat Valasztunk $U$ -ban es $V$ -ben is egy-egy bazist. Igy mukodik az izomorfizmus tehat vehetjuk ugy is, hogy 
+{/* todo ez itt nagyon rossz */}
+
