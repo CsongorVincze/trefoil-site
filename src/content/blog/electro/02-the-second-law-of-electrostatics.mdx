@@ -114,3 +114,92 @@ $$
 $$
 
 👨‍🏫: As a homework you can think about what this cyclic integral means intuitively!
+
+👨‍🏫: Hello again! Have you taught about the homework?
+
+🙋‍♂️: If we integrate the flux over a closed surface it feels like we measure that something is flowing out of our surface. Like we have a water source inside and we measure how much water is passing trough our closed surface.
+
+👨‍🏫: Wow I did not expect that! Rally good! Indeed flux integrated over a closed surface has something to do with the flow of something. In our case this something is the electric field. Let's try an important exercise! You have a point charge and you "put" a sphere around that charge (the charge is in the centre of the sphere). What is the flux integrated over this sphere?
+
+Solution:
+
+As a first step we notice the symmetry of our system. As we know the electric field around a point charge is always pointing away from the charge (so its direction is radial). And if we cut the sphere to tiny-tiny elements, the surface vector of these elements will be also in radial direction. In addition to this the the magnitude of these vectors are equal everywhere (again due to the spherical symmetry). So we have an easy situation. We can replace the dot product and the integration by writing;
+
+$$
+\Phi_A = E(r)4\pi r^2
+$$
+Substituting back what we've got for the field of a point charge.:
+$$
+\Phi_A = \frac{Q}{4\pi \epsilon_0 r^2} 4 \pi r^2
+\\
+\quad\\
+\\
+\Phi_A = \frac{Q}{\epsilon_0}
+$$
+
+👨‍🏫: What we've got is rally interesting. Try to analyze the result! What does it depends on?
+
+🙋‍♂️: $\epsilon_0$ is just a constant. So it only depends on the charge inside the sphere. The interesting part is that it does not depend on the radius of the sphere, as long as the sphere is centered around the charge.
+
+👨‍🏫: Good observation. (Note: even if the centre of the sphere would not coincide with our charge the result would be inchanged, as long as the sphere consists the charge.) Actually the experiments show us that the case is rally similar with arbitrary many charges and arbitrary surface around the charges. we can formultat this by the following.:
+
+$$
+\oint_A \mathbf{E}d\mathbf{A} = \frac{1}{\epsilon_0} \sum_{i = 0}^n Q_i
+$$
+
+The formula above is for discrete point charges. If we want to formulte this with a charge density we could do that like this.:
+$$
+\oint_A \mathbf{E}d\mathbf{A} = \frac{1}{\epsilon_0} \int_V \delta dV
+$$
+
+We can think of the surface as the boundary of a volume. So we can rewrite this expression as; (this is just a formalism tough)
+$$
+\oint_{\partial V} \mathbf{E}d\mathbf{A} = \frac{1}{\epsilon_0} \int_V \delta dV
+$$
+
+👨‍🏫: Actually we have arrived to our destination. This is the second law of electrostatics. It is also called the integral form of gauss's law. It is a little confusing cause there are two theorems that are clearly related but on the other hand they are not the same. First we have Gauss's law of electrostatics, this is the one that we saw here. Second we have the Gauss-Ostrogradsky theorem that is a mathematical concept. Next we'll use the Gauss-Ostrogradsky to arrive to a different form of gauss's law of electrostatics.
+
+👨‍🏫: So first let's define divergence cause tihs is a main element in the Gauss-Ostrogradsky theorem. Let's say that we have a vector field in 3D space. For a really small cube we can calculate the divergence by taking the dot product between the vector field at the side of the cube that we're interested in and the surface normal of that side. We repeat this for all sides of the cube and sum the results. After we're done with this we devide by the volume of the small cube. And heay if we want to be rally precise we take the limit as this volume goes to zero. Writing this out mathematically.:
+
+$$
+divF = \lim_{\Delta V \to 0} \frac{\sum_{i = 1}^{6} \mathbf{F} \Delta \mathbf{A} }{\Delta V}
+$$
+
+Now we use a trick. We can estimate every volume with these infinitesimally small cubes (Maybe mathematically we would have to be a little bit more precise but this approach will be good enough for us.) If we have two cubes nexto to each other the dot product part cancels out cause the field is the same but the surface normal is pointing to the opposite direction. So what will happen If we do this trick for every little cubes?
+
+🙋‍♂️: All that we'll left with is the sum of the dot procuct terms on the boundary of our surface, right?
+
+👨‍🏫: Yes rally good. We formulte this and we get this:
+$$
+\int_V div \mathbf{F} dV = \oint_{\partial V} \mathbf{F} d\mathbf{A}
+$$
+
+Just a notational shorthand, we somethimes write $ \nabla \cdot \mathbf{F} = div \mathbf{F} $. Using this we can rewrite our equations.:
+$$
+\int_V \nabla \cdot \mathbf{F} dV = \oint_{\partial V} \mathbf{F} d\mathbf{A}
+$$
+
+👨‍🏫: Can you notice something btween the equation above and gauss's law?
+
+🙋‍♂️: In both of them we have a cyclic integral and we integrate the dot product of a vector field with surface normal.
+
+👨‍🏫: Exactly! So If we combine the mathemathical Gauss-Ostrogradsky theorem with the second law of electrostatics we get:
+
+$$
+\int_V \nabla \cdot \mathbf{E} dV = \frac{1}{\epsilon_0} \int_V \delta dV 
+$$
+
+If it's true for every surface than we can just drop the integral and cencel out the $dV$-s and end up with:
+
+$$
+\nabla \cdot \mathbf{E} = \frac{\delta}{\epsilon_0}
+$$
+
+And this is the differential form of Gauss's law.
+{/* todo itt meg el kene olvasd a jegyzetet h mivel tudnad kiegesziteni */}
+{/* todo meg kell csinald a magyarazo kepeket */}
+
+
+
+
+
