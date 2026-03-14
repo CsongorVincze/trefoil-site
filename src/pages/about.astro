@@ -8,6 +8,8 @@ import Layout from '../layouts/BlogPost.astro';
 	description="The people behind Trefoil — building a bridge between intuition and rigorous STEM education."
 	pubDate={new Date('February 26 2026')}
 	heroImage={AboutHeroImage}
+	category="blog"
+	lang="en"
 >
 
 	<div class="about-wrapper">
@@ -38,7 +40,7 @@ import Layout from '../layouts/BlogPost.astro';
 			<p>
 				Occasionally we send out a newsletter with updates on new study materials and workshops (for high-school students).
 			</p>
-			<form class="newsletter-form" action="https://buttondown.com/api/emails/embed-subscribe/farkas_csongor" method="POST" onsubmit="event.preventDefault(); alert('Newsletter service integration coming soon!');">
+			<form class="newsletter-form" action="https://buttondown.com/api/emails/embed-subscribe/farkas_csongor" method="POST" target="_blank">
 				<input type="email" name="email" placeholder="Your email address" required class="newsletter-input" />
 				<button type="submit" class="newsletter-button">Subscribe</button>
 			</form>
