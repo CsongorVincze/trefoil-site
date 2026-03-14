@@ -13,24 +13,35 @@ import Layout from '../layouts/BlogPost.astro';
 	<div class="about-wrapper">
 
 		<p class="about-intro">
-			Hey there! 👋 We're <strong>Attila</strong> and <strong>Csongor Vincze</strong> — two brothers who got passionate about teching cool things.
+			Hey there! 👋 We're <strong>Attila</strong> and <strong>Csongor Vincze</strong> — two brothers who love creating cool things, learning about interesting topics, and of course, teaching.
 		</p>
 
 		<section class="about-section">
 			<div class="section-label">How it started</div>
 			<p>
-				It all began with a high-school workshop. We wanted to show younger students that STEM isn't just dry theory — it's full of beautiful patterns, surprising connections, and genuinely fun problems. We started by teaching middle-schoolers 3D design, basic programming, and a touch of electronics. (By the way that workshop is still active today.)
+				It all began with a high school workshop. We wanted to bring younger students closer to STEM. We started by teaching 3D design, basic programming, and a touch of electronics. By the way, that workshop is still active today. Attila is working with the students now, and they are getting into game dev.
 			</p>
 		</section>
 
 		<section class="about-section">
 			<div class="section-label">What Trefoil is</div>
 			<p>
-				Trefoil is our attempt to scale that workshop to the internet. We write study materials that bridge the gap between raw intuition and rigorous theory — the kind of explanations we wished we had when we were learning. Expect interactive simulations, worked examples, and the occasional detour into why something actually works, not just how.
+				Trefoil is our attempt to scale that workshop to the internet, and reach more people. Lately we are writeing study materials. You can expect interactive simulations, worked examples, and the occasional detour into why something actually works, not just how.
 			</p>
 			<p>
-				We cover topics across <strong>mathematics</strong>, <strong>physics</strong>, and <strong>engineering</strong>. And we believe deeply that the best way to understand something is to play with it — so you'll find a lot of simulations and hands-on exercises alongside the theory.
+				We cover topics across <strong>mathematics</strong>, <strong>physics</strong>, and <strong>engineering</strong>. We believe that the best way to understand something is to play with it — so you'll find a lot of simulations and hands-on exercises alongside the theory. (Okay, it's not fully done yet, but we're working on it!)
 			</p>
+		</section>
+
+		<section class="about-section newsletter-section">
+			<div class="section-label">Stay Updated</div>
+			<p>
+				Occasionally we send out a newsletter with updates on new study materials and workshops (for high-school students).
+			</p>
+			<form class="newsletter-form" action="https://buttondown.com/api/emails/embed-subscribe/farkas_csongor" method="POST" onsubmit="event.preventDefault(); alert('Newsletter service integration coming soon!');">
+				<input type="email" name="email" placeholder="Your email address" required class="newsletter-input" />
+				<button type="submit" class="newsletter-button">Subscribe</button>
+			</form>
 		</section>
 
 		<section class="about-section">
@@ -63,7 +74,7 @@ import Layout from '../layouts/BlogPost.astro';
 		<section class="about-section">
 			<div class="section-label">Previous projects</div>
 			<p>
-				Want to see what else we've been up to outside of Trefoil? Take a look at our CanSat project — a miniaturized satellite the size of a soda can, built and launched as part of a high school competition, with other amazing teammates.
+				Want to see what else we've been up to outside of Trefoil? Take a look at our CanSat project — a miniaturized satellite the size of a soda can, built and launched as part of a high school competition, with other amazing teammates. Huge thanks to the guys at <a href="https://www.growmesh.io/" target="_blank" rel="noopener noreferrer">mesh</a>. Back then they helped us a lot, and this is something that hasn't changed.
 			</p>
 			<a class="project-card" href="https://sites.google.com/view/tfs-cansat/szponzorok?authuser=0" target="_blank" rel="noopener noreferrer">
 				<div class="project-card-left">
@@ -115,6 +126,8 @@ import Layout from '../layouts/BlogPost.astro';
 	.about-section:nth-child(2) { animation-delay: 0.2s; }
 	.about-section:nth-child(3) { animation-delay: 0.35s; }
 	.about-section:nth-child(4) { animation-delay: 0.5s; }
+	.about-section:nth-child(5) { animation-delay: 0.65s; }
+	.about-section:nth-child(6) { animation-delay: 0.8s; }
 
 	.about-section p {
 		margin: 0;
@@ -125,6 +138,77 @@ import Layout from '../layouts/BlogPost.astro';
 
 	.about-section strong {
 		color: var(--frosted-blue);
+	}
+
+	.about-section a {
+		color: var(--frosted-blue);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.about-section a:hover {
+		color: var(--honeydew);
+	}
+
+	/* ── Newsletter ── */
+	.newsletter-section {
+		background: rgba(168, 218, 220, 0.04);
+		border: 1px solid rgba(168, 218, 220, 0.2);
+		border-radius: 12px;
+		padding: 1.5rem;
+		margin-top: 0.5rem;
+	}
+
+	.newsletter-form {
+		display: flex;
+		gap: 0.75rem;
+		margin-top: 0.75rem;
+		flex-wrap: wrap;
+	}
+
+	.newsletter-input {
+		flex: 1;
+		min-width: 200px;
+		padding: 0.75rem 1rem;
+		border-radius: 8px;
+		border: 1px solid rgba(168, 218, 220, 0.3);
+		background: rgba(0, 0, 0, 0.2);
+		color: var(--honeydew);
+		font-family: inherit;
+		font-size: 0.95em;
+		outline: none;
+		transition: border-color 0.2s ease, box-shadow 0.2s ease;
+	}
+
+	.newsletter-input:focus {
+		border-color: var(--frosted-blue);
+		box-shadow: 0 0 0 2px rgba(168, 218, 220, 0.15);
+	}
+
+	.newsletter-input::placeholder {
+		color: rgba(168, 218, 220, 0.5);
+	}
+
+	.newsletter-button {
+		padding: 0.75rem 1.5rem;
+		border-radius: 8px;
+		border: none;
+		background: var(--frosted-blue);
+		color: #0b192c;
+		font-weight: 700;
+		font-size: 0.95em;
+		font-family: inherit;
+		cursor: pointer;
+		transition: background 0.2s ease, transform 0.2s ease;
+	}
+
+	.newsletter-button:hover {
+		background: var(--honeydew);
+		transform: translateY(-2px);
+	}
+
+	.newsletter-button:active {
+		transform: translateY(0);
 	}
 
 	/* ── Section label (eyebrow style) ── */
