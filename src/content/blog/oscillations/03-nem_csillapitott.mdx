@@ -1,0 +1,128 @@
+---
+title: 'Harmónikus rezgőmozgás'
+description: 'Part of Oscillations.'
+pubDate: 'Apr 02, 2026'
+heroImage: '../../../assets/blog-placeholder-3.jpg'
+tags: ['physics', 'math', 'simulation']
+category: 'learn'
+lang: 'hu'
+seriesId: 'oscillations'
+order: 3
+prev: { title: 'De mik is azok a rezgések?', link: '/blog/oscillations/01-de-mik-is-azok-a-rezgesek' }
+next: { title: 'The Physics Behind It', link: '/blog/oscillations/03-the-physics-behind-it' }
+---
+{/* todo ez itt nem jo meg */}
+import Question from '../../../components/Question.astro';
+import UnderConstruction from '../../../components/UnderConstruction.astro';
+
+👨‍🏫🙋‍♂️
+
+👨‍🏫: Kezdjuk el megerteni a rezgeseket dinamikai leirason keresztul! Vegyunk egy testet ami hozza van erositve egy rugohoz ami pedig a falhoz van erositve. Milyen erok hatnak erre a testre? (feltetelezzuk, hogy a surlodas elhanyagolhato.)
+
+
+<Question
+  lang="hu"
+  question="Milyen erok hatnak a testre"
+  options={[
+    "nehezsegi ero, rugo ero",
+    "a talaj nyomoereje, nehezsegi ero ero, es a rugoero"
+    "a talaj nyomoereje, nehezsegi ero ero,",
+  ]}
+  correctAnswerIndex={2}
+/>
+
+Nagyon jo! rajzoljuk is be ezeket az eroket. Ha ezt megtesszuk akkor valami ilyesmit kapunk.
+
+Na most emlekszel meg newton masodik torvenyere?
+
+🙋‍♂️: Igen, $F=ma$
+
+👨‍🏫: Szuper, szavakban osszefoglalva a testre hato osszes ero (vektoros) osszege egyenlo a test tomegenek es gyorsulasanak szorzataval. Csak a szemleletesseg kedveert beirhatunk egy szummat az $F$ ele, hogy jelezzuk az erok szuperpoziciojarol (kb. fancy nev a osszegzesere) van itt szo. $\sum F = ma$. Namarmost nekunk van egy olyan elonyunk, hogy most ebben az egyszeru esetben minden ero egy egyenesre esik, igy szimplan a $\sum F$-et kifelyezhetjuk siman skalarok (szamok) osszegekent nem kell a vektorokkal bajlodjunk. Amire egyedul figyelnunk kell, hogy az elojeleket jol kezeljuk.
+
+<Question
+  lang="hu"
+  question="Hogyan tudod felirni $\sum F$-et?"
+  options={[
+    "$ \sum F = -D x $",
+    "$ \sum F = D x $",
+    "$ \sum F = mg - D x $"
+  ]}
+  correctAnswerIndex={0}
+/>
+
+👨‍🏫: Igen, szoval a nyomoero es a nehezsegi ero szerencsere ugyan akkora nagysagu de ellentetes iranyu, igy ok "kiejtik" egymast. Es igy szerencsere ebben az egyszeru esetben csak a rugoerovel kell foglalkozzunk. (Feltetelezzuk, hogy egy linearis rugonk van $D$ rugoallandoval. Igy a rugo ero a kiterites nagysagaval aranyos de iranya ellenkezo iranyu, ezert irjuk a minusz elojelet a $D x$ ele.) Igy a mozgasegyenletunk a kovetkezo: $ma = - Dx$
+
+<Question
+  lang="hu"
+  question="Hogyan tudjuk a gyorsulast mashogy felirni?"
+  options={[
+    "a sebesseg ido szerinti masodik derivaltja",
+    "az ut ido szerinti masodik derivaltja",
+    "a sebesseg ido szerinti integralja"
+  ]}
+  correctAnswerIndex={1}
+/>
+👨‍🏫: Pontosan. Az ido szerinti derivalast szoktuk ugy jelolni, hogy a mennyiseg (amit derivalunk) fele egy pontot rakunk. Tehat ha $a$-ra ugy tekintunk mint az ut ido szerinti masodik derivaltjara, akkor az egyenletunket a kovetkezo alakba irhatjuk. $ m\ddot{x} = -Dx $
+
+🙋‍♂️: Es ez pontosan miert is jo nekunk?
+
+👨‍🏫: Ez igazabol egy trukk volt. Most mar az egyenletunkben csak egy valtozo van $x$. Najo persze van meg $x$ masodik derivaltja is. De ha tudjuk $x$-et akkor $x$ masodik derivaltjat is megkaphatjuk. Ha matekos szemmel nezzuk ezt az egyenletet akkor, amit kaptunk az egy masodrendu, egyvaltozos, kozonseges, linearis, homogen differencialegyenlet.
+
+🙋‍♂️: Fhuuuuuu... mi ez a sok fogalom egyszerre?!
+
+👨‍🏫: Szerencsere nem kell most ezeket teljesen ertsuk. De ha van kedved utananezhetsz kesobb majd ki fogjuk hasznalni ezeket a tulajdonsagokat. Most egyelore csak tippelgessunk. Tudsz-e olyan fuggvenyt amit ha beirnank az $x$ helyere akkor egy valid egyenletet kapnank?
+
+🙋‍♂️: Gondolom valamilyen szinuszos fuggvenyt kell beirjunk, mivel ez valamilyen rezgomozgas egyenlete nem?
+
+👨‍🏫: Jo gonodlat, ellenorizzuk le, hogy valoban igy van-e! Irjuk be $sin(t)$-t az egyenletbe. mit kapunk?
+
+<Question
+  lang="hu"
+  question="Eloszor is, mi lesz $\ddot{x}$-bol, ha $x(t) = sin(t)$?"
+  options={[
+    "cos(t)",
+    "sin(t)",
+    "-sin(t)"
+  ]}
+  correctAnswerIndex={2}
+/>
+
+<Question
+  lang="hu"
+  question="Akkor most hogy fog kinezni a mozgasegyenletunk?"
+  options={[
+    "$ sin(t) = sin(t) $",
+    "$ -m sin(t) = -D sin(t) $",
+    "$ m cos(t) = sin(t) $"
+  ]}
+  correctAnswerIndex={1}
+/>
+
+🙋‍♂️: De varjunk ez nem is jo. Ha $m$ es $D$ nem egyezik akkor ez nem is egy helyes egyenlet.
+
+👨‍🏫: Ajj ajj valoban valami baj van. Sot meg a mertekegysegek sem egyeznek meg. Hat akkor mit csinaljunk?
+
+<Question
+  lang="hu"
+  question="Probalgasd ki, hogy az alabbi fuggvenyek kozul melyik oldja meg a mozgasegyenletunket!"
+  options={[
+    "$ x(t) = sin(t + \phi) $",
+    "$ x(t) = A sin(t) $",
+    "$ x(t) = sin(\omega t) $"
+  ]}
+  correctAnswerIndex={2}
+/>
+
+👨‍🏫: Ha beirunk egy $\omega$-t a $t$ melle akkor a derivalasi lanc szabaly "kihozza" nekunk az $\omega$-t, nem is egyszer hanem ketszer is. Igy $\ddot{x} = -\omega^2 sin(\omega t)$ Es ez szerencsere megoldja az egyenletunket, ha $\omega$-t megfeleloen valasztjuk meg.
+
+<Question
+  lang="hu"
+  question="Hogy valasszuk meg $\omega$ erteket, hogy valid egyenletunk legyen?"
+  options={[
+    "$ \omega =  $"
+  ]}
+  correctAnswerIndex={2}
+/>
+
+
+
